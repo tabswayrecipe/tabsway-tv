@@ -1,66 +1,67 @@
+:root {
+  --yellow: #FFD21C;
+  --yellow-dark: #F4B900;
+
+  --red: #D71920;
+  --red-dark: #A90F15;
+
+  --white: #FFFFFF;
+  --black: #080808;
+  --dark: #151515;
+}
+
+
+/* =========================================
+   RESET
+========================================= */
+
 * {
   box-sizing: border-box;
 }
 
-
 html,
 body,
 #root {
-
   width: 100%;
   height: 100%;
-
   margin: 0;
   padding: 0;
-
   overflow: hidden;
-
 }
 
-
 body {
-
-  background: #050505;
-
-  color: #ffffff;
+  background: #080808;
+  color: white;
 
   font-family:
     Inter,
     "Segoe UI",
-    Roboto,
     Arial,
     sans-serif;
-
-  -webkit-font-smoothing:
-    antialiased;
-
 }
 
 
-/* =====================================
+/* =========================================
    APP
-===================================== */
+========================================= */
 
 .app {
-
-  position: relative;
-
   width: 100vw;
   height: 100vh;
 
+  position: relative;
+
   overflow: hidden;
 
-  background: #050505;
-
+  background: #080808;
 }
 
 
-/* =====================================
-   PROMOTION
-===================================== */
+/* =========================================
+   PROMOTION BACKGROUND
+========================================= */
 
 .promotion {
-
   position: absolute;
 
   inset: 0;
@@ -68,31 +69,27 @@ body {
   width: 100%;
   height: 100%;
 
-  background-color: #111;
+  background-size: cover;
 
   background-position: center;
 
   background-repeat: no-repeat;
 
-  background-size: cover;
-
   overflow: hidden;
 
   animation:
-    backgroundZoom
-    12s
-    cubic-bezier(.16,1,.3,1)
+    photoZoom
+    14s
+    ease-out
     forwards;
-
 }
 
 
-/* =====================================
-   DARK OVERLAY
-===================================== */
+/* =========================================
+   PHOTO OVERLAY
+========================================= */
 
-.image-overlay {
-
+.photo-overlay {
   position: absolute;
 
   inset: 0;
@@ -100,177 +97,304 @@ body {
   z-index: 1;
 
   background:
-
     linear-gradient(
       90deg,
+
       rgba(0,0,0,.94) 0%,
-      rgba(0,0,0,.78) 28%,
-      rgba(0,0,0,.42) 58%,
-      rgba(0,0,0,.12) 100%
-    );
 
+      rgba(0,0,0,.80) 27%,
+
+      rgba(0,0,0,.48) 52%,
+
+      rgba(0,0,0,.08) 85%
+    );
 }
 
 
-/* Bottom cinematic darkness */
+/* Bottom fade */
 
-.image-overlay::after {
-
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  background:
-
-    linear-gradient(
-      0deg,
-      rgba(0,0,0,.88) 0%,
-      rgba(0,0,0,.35) 35%,
-      transparent 65%
-    );
-
-}
-
-
-/* =====================================
-   VIGNETTE
-===================================== */
-
-.image-vignette {
-
+.photo-gradient {
   position: absolute;
 
   inset: 0;
 
   z-index: 2;
+
+  background:
+    linear-gradient(
+      0deg,
+      rgba(0,0,0,.95) 0%,
+      rgba(0,0,0,.55) 18%,
+      transparent 45%
+    );
+}
+
+
+/* Vignette */
+
+.photo-vignette {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 3;
 
   pointer-events: none;
 
-  background:
-
-    radial-gradient(
-      ellipse at center,
-      transparent 40%,
-      rgba(0,0,0,.45) 100%
-    );
-
+  box-shadow:
+    inset
+    0 0
+    140px
+    rgba(0,0,0,.7);
 }
 
 
-/* =====================================
-   AMBIENT LIGHT
-===================================== */
+/* =========================================
+   BRAND LIGHTS
+========================================= */
 
-.ambient-light {
-
+.yellow-light {
   position: absolute;
 
-  z-index: 2;
+  width: 650px;
+  height: 650px;
 
-  width: 70vw;
-  height: 70vw;
-
-  left: -30vw;
-  top: -30vw;
+  left: -350px;
+  top: -300px;
 
   border-radius: 50%;
 
   background:
-
     radial-gradient(
       circle,
-      rgba(245,166,35,.25),
-      rgba(245,166,35,.08) 30%,
+      rgba(255,210,28,.22),
       transparent 70%
     );
 
-  filter:
-    blur(55px);
-
-  pointer-events: none;
-
-  animation:
-    ambientMove
-    10s
-    ease-in-out
-    infinite alternate;
-
-}
-
-
-/* =====================================
-   FOOD GLOW
-===================================== */
-
-.food-glow {
-
-  position: absolute;
+  filter: blur(50px);
 
   z-index: 2;
 
-  right: -10vw;
-  bottom: -30vw;
+  animation:
+    yellowMove
+    10s
+    ease-in-out
+    infinite
+    alternate;
+}
 
-  width: 70vw;
-  height: 70vw;
+
+.red-light {
+  position: absolute;
+
+  width: 550px;
+  height: 550px;
+
+  right: -300px;
+  bottom: -300px;
 
   border-radius: 50%;
 
   background:
-
     radial-gradient(
       circle,
-      rgba(255,179,70,.16),
-      transparent 65%
+      rgba(215,25,32,.24),
+      transparent 70%
     );
 
-  filter:
-    blur(70px);
+  filter: blur(60px);
+
+  z-index: 2;
 
   animation:
-    foodGlowMove
+    redMove
     12s
     ease-in-out
-    infinite alternate;
-
+    infinite
+    alternate;
 }
 
 
-/* =====================================
+/* =========================================
+   HEADER
+========================================= */
+
+.tv-header {
+  position: absolute;
+
+  z-index: 20;
+
+  top: 4vh;
+
+  left: 5vw;
+  right: 5vw;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+
+/* =========================================
+   FADED WHITE LOGO PANEL
+========================================= */
+
+.brand-container {
+  display: flex;
+
+  align-items: center;
+
+  padding:
+    10px
+    18px;
+
+  /*
+   * Faded white background.
+   * This creates the soft restaurant
+   * signage effect.
+   */
+  background:
+    rgba(255,255,255,.55);
+
+  border:
+    1px solid
+    rgba(255,255,255,.42);
+
+  border-radius: 14px;
+
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
+
+  box-shadow:
+    0 12px 35px
+    rgba(0,0,0,.28);
+
+  animation:
+    logoAppear
+    .9s
+    ease-out
+    both;
+}
+
+
+/* Logo */
+
+.header-logo {
+  width:
+    clamp(
+      190px,
+      15vw,
+      340px
+    );
+
+  max-height: 100px;
+
+  object-fit: contain;
+
+  display: block;
+
+  filter:
+    drop-shadow(
+      0 4px 8px
+      rgba(0,0,0,.22)
+    );
+}
+
+
+/* =========================================
+   HEADER LABEL
+========================================= */
+
+.header-tag {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding:
+    10px
+    17px;
+
+  border-radius: 30px;
+
+  background:
+    rgba(0,0,0,.55);
+
+  border:
+    1px solid
+    rgba(255,255,255,.15);
+
+  backdrop-filter:
+    blur(12px);
+
+  color:
+    white;
+
+  font-size:
+    12px;
+
+  font-weight:
+    800;
+
+  letter-spacing:
+    2px;
+}
+
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background:
+    var(--red);
+
+  box-shadow:
+    0 0 15px
+    var(--red);
+
+  animation:
+    livePulse
+    1.5s
+    infinite;
+}
+
+
+/* =========================================
    CONTENT
-===================================== */
+========================================= */
 
 .promotion-content {
-
   position: relative;
 
-  z-index: 5;
+  z-index: 10;
 
   width: 62%;
 
-  min-width: 600px;
-
   padding-left: 7vw;
 
-  padding-top: 13vh;
+  padding-top: 25vh;
 
   animation:
-    contentEnter
-    .95s
+    contentIn
+    .9s
     cubic-bezier(.16,1,.3,1)
     both;
-
 }
 
 
-/* =====================================
+/* =========================================
    BADGE
-===================================== */
+========================================= */
 
-.badge {
-
+.promo-badge {
   display: inline-flex;
 
   align-items: center;
@@ -281,76 +405,85 @@ body {
     11px
     20px;
 
-  border:
-
-    1px solid
-    rgba(255,255,255,.24);
-
-  border-radius: 999px;
+  border-radius: 30px;
 
   background:
-    rgba(255,255,255,.10);
+    var(--red);
 
-  backdrop-filter:
-    blur(14px);
-
-  -webkit-backdrop-filter:
-    blur(14px);
-
-  color: #ffd36a;
+  color:
+    white;
 
   font-size:
     clamp(
-      13px,
+      12px,
       1vw,
       17px
     );
 
-  font-weight: 800;
+  font-weight: 900;
 
-  letter-spacing: 2px;
-
-  text-transform: uppercase;
+  letter-spacing:
+    2px;
 
   box-shadow:
-    0 10px 40px
-    rgba(0,0,0,.2);
+    0 8px 30px
+    rgba(215,25,32,.35);
 
   animation:
-    badgeEnter
-    .8s
+    badgeIn
+    .7s
     .1s
     both;
-
 }
 
 
-/* =====================================
+/* =========================================
+   ACCENT
+========================================= */
+
+.red-accent-line {
+  width: 70px;
+
+  height: 6px;
+
+  margin-top: 25px;
+
+  border-radius: 5px;
+
+  background:
+    var(--yellow);
+
+  box-shadow:
+    0 0 20px
+    rgba(255,210,28,.45);
+}
+
+
+/* =========================================
    TITLE
-===================================== */
+========================================= */
 
 .promotion-content h1 {
-
   margin:
-    30px
+    20px
     0
     12px;
 
-  padding: 0;
-
-  max-width: 1000px;
+  max-width:
+    1000px;
 
   font-size:
     clamp(
-      60px,
-      7vw,
-      125px
+      65px,
+      7.5vw,
+      135px
     );
 
   line-height:
-    .88;
+    .86;
 
-  font-weight: 950;
+  font-weight:
+    950;
 
   letter-spacing:
     -5px;
@@ -358,573 +491,589 @@ body {
   text-transform:
     uppercase;
 
-  color: #ffffff;
+  color:
+    white;
 
   text-shadow:
-
-    0 10px 50px
-    rgba(0,0,0,.65);
+    0 10px 40px
+    rgba(0,0,0,.75);
 
   animation:
-    titleEnter
+    titleIn
     .9s
-    .2s
+    .15s
     both;
-
 }
 
 
-/* =====================================
+/* =========================================
    SUBTITLE
-===================================== */
+========================================= */
 
 .promotion-content h2 {
-
   margin: 0;
-
-  padding: 0;
 
   font-size:
     clamp(
-      27px,
+      28px,
       3vw,
       52px
     );
 
-  line-height: 1.1;
+  line-height:
+    1.05;
 
-  font-weight: 650;
+  font-weight:
+    800;
 
-  color: #ffd36a;
+  color:
+    var(--yellow);
 
   text-shadow:
     0 5px 25px
-    rgba(0,0,0,.5);
+    rgba(0,0,0,.65);
 
   animation:
-    subtitleEnter
+    subtitleIn
     .8s
-    .4s
+    .35s
     both;
-
 }
 
 
-/* =====================================
+/* =========================================
    DESCRIPTION
-===================================== */
+========================================= */
 
 .promotion-content p {
-
-  max-width: 800px;
+  max-width:
+    750px;
 
   margin:
-    27px
+    25px
     0
     0;
-
-  padding: 0;
 
   font-size:
     clamp(
       18px,
-      1.5vw,
-      29px
+      1.45vw,
+      27px
     );
 
   line-height:
-    1.5;
-
-  font-weight: 450;
+    1.45;
 
   color:
-    rgba(255,255,255,.86);
-
-  text-shadow:
-    0 4px 20px
-    rgba(0,0,0,.55);
+    rgba(255,255,255,.88);
 
   animation:
-    descriptionEnter
+    paragraphIn
     .8s
-    .55s
+    .5s
     both;
-
 }
 
 
-/* =====================================
-   BOTTOM ROW
-===================================== */
+/* =========================================
+   OFFER
+========================================= */
 
-.bottom-row {
-
+.offer-row {
   display: flex;
 
   align-items: center;
 
-  flex-wrap: wrap;
+  gap: 25px;
 
-  gap: 32px;
-
-  margin-top: 38px;
+  margin-top:
+    35px;
 
   animation:
-    bottomEnter
+    offerIn
     .8s
-    .7s
+    .65s
     both;
-
 }
 
 
-/* =====================================
+/* =========================================
    PRICE
-===================================== */
+========================================= */
+
+.price-box {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+}
+
+
+.price-label {
+  font-size:
+    13px;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    3px;
+
+  color:
+    white;
+
+  opacity:
+    .8;
+}
+
 
 .price {
-
   font-size:
     clamp(
-      42px,
-      4.5vw,
-      78px
+      48px,
+      5vw,
+      85px
     );
 
-  line-height: 1;
+  line-height:
+    .95;
 
-  font-weight: 950;
+  font-weight:
+    950;
 
-  color: #ffffff;
+  color:
+    var(--yellow);
 
   text-shadow:
-
-    0 6px 30px
-    rgba(0,0,0,.65);
-
+    0 5px 25px
+    rgba(0,0,0,.6);
 }
 
 
-/* =====================================
+/* =========================================
    CTA
-===================================== */
+========================================= */
 
-.cta {
-
-  display: inline-flex;
+.cta-button {
+  display: flex;
 
   align-items: center;
 
-  gap: 12px;
+  gap: 13px;
 
   padding:
-    17px
-    26px;
+    18px
+    28px;
 
-  border-radius: 13px;
+  border-radius:
+    12px;
 
   background:
-    linear-gradient(
-      135deg,
-      #ffc15a,
-      #ed9412
-    );
+    var(--red);
 
-  color: #17120a;
+  color:
+    white;
 
   font-size:
     clamp(
-      16px,
+      15px,
       1.3vw,
       21px
     );
 
-  font-weight: 950;
+  font-weight:
+    950;
 
-  letter-spacing: 1px;
+  letter-spacing:
+    1px;
 
   box-shadow:
-
     0 12px 35px
-    rgba(237,148,18,.28);
+    rgba(215,25,32,.35);
 
   animation:
-    ctaPulse
+    ctaFloat
     2.5s
-    1.5s
     ease-in-out
     infinite;
-
 }
 
 
-/* =====================================
-   BRAND LOGO
-===================================== */
+/* =========================================
+   QUALITY
+========================================= */
 
-.bottom-brand {
-
-  position: absolute;
-
-  z-index: 10;
-
-  right: 5vw;
-
-  bottom: 5vh;
-
+.quality-row {
   display: flex;
 
-  align-items: center;
+  gap: 25px;
 
-  justify-content: center;
+  margin-top:
+    30px;
 
   animation:
-    logoEnter
-    1s
+    qualityIn
+    .8s
     .8s
     both;
-
 }
 
 
-.bottom-brand img {
-
-  display: block;
-
-  width:
-    clamp(
-      160px,
-      13vw,
-      300px
-    );
-
-  height: auto;
-
-  max-height: 120px;
-
-  object-fit: contain;
-
-  filter:
-
-    drop-shadow(
-      0 8px 28px
-      rgba(0,0,0,.65)
-    );
-
-}
-
-
-/* =====================================
-   SCREEN SHINE
-===================================== */
-
-.screen-shine {
-
-  position: absolute;
-
-  z-index: 8;
-
-  inset: 0;
-
-  pointer-events: none;
-
-  background:
-
-    linear-gradient(
-      115deg,
-      transparent 0%,
-      transparent 45%,
-      rgba(255,255,255,.035) 50%,
-      transparent 55%,
-      transparent 100%
-    );
-
-  transform:
-    translateX(-100%);
-
-  animation:
-    shineSweep
-    8s
-    2s
-    ease-in-out
-    infinite;
-
-}
-
-
-/* =====================================
-   PROGRESS DOTS
-===================================== */
-
-.progress {
-
-  position: fixed;
-
-  z-index: 30;
-
-  left: 50%;
-
-  bottom: 3vh;
-
-  transform:
-    translateX(-50%);
-
+.quality-item {
   display: flex;
 
   align-items: center;
 
   gap: 8px;
 
+  color:
+    rgba(255,255,255,.72);
+
+  font-size:
+    14px;
+
+  font-weight:
+    700;
+}
+
+
+.quality-item svg {
+  color:
+    var(--yellow);
+}
+
+
+/* =========================================
+   FOOD LABEL
+========================================= */
+
+.food-label {
+  position: absolute;
+
+  z-index: 10;
+
+  right: 4vw;
+
+  bottom: 17vh;
+
+  padding:
+    10px
+    17px;
+
+  border-left:
+    4px
+    solid
+    var(--yellow);
+
+  background:
+    rgba(0,0,0,.5);
+
+  backdrop-filter:
+    blur(10px);
+
+  color:
+    white;
+
+  font-size:
+    11px;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    3px;
+
+  animation:
+    labelIn
+    1s
+    .9s
+    both;
+}
+
+
+/* =========================================
+   BOTTOM BRAND
+========================================= */
+
+.bottom-brand {
+  position: absolute;
+
+  z-index: 20;
+
+  left: 5vw;
+  right: 5vw;
+
+  bottom: 4vh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 22px;
+}
+
+
+.bottom-brand img {
+  width:
+    clamp(
+      130px,
+      10vw,
+      230px
+    );
+
+  max-height:
+    70px;
+
+  object-fit:
+    contain;
+
+  /*
+   * Subtle faded white panel
+   */
+  padding:
+    6px
+    12px;
+
+  border-radius:
+    10px;
+
+  background:
+    rgba(255,255,255,.45);
+
+  backdrop-filter:
+    blur(8px);
+
+  -webkit-backdrop-filter:
+    blur(8px);
+
+  filter:
+    drop-shadow(
+      0 6px 18px
+      rgba(0,0,0,.5)
+    );
+}
+
+
+.brand-line {
+  height: 2px;
+
+  flex: 1;
+
+  max-width:
+    280px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--yellow),
+      transparent
+    );
+
+  opacity:
+    .7;
+}
+
+
+/* =========================================
+   SCREEN SHINE
+========================================= */
+
+.screen-shine {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 30;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      110deg,
+      transparent 42%,
+      rgba(255,255,255,.05) 50%,
+      transparent 58%
+    );
+
+  transform:
+    translateX(-100%);
+
+  animation:
+    shine
+    8s
+    2s
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+.progress {
+  position: fixed;
+
+  z-index: 50;
+
+  left: 50%;
+
+  bottom: 2vh;
+
+  transform:
+    translateX(-50%);
+
+  display: flex;
+
+  gap: 8px;
 }
 
 
 .progress-dot {
-
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
 
   padding: 0;
 
   border: 0;
 
-  border-radius: 999px;
+  border-radius: 20px;
 
   background:
     rgba(255,255,255,.35);
-
-  cursor: pointer;
-
-  transition:
-
-    width .4s ease,
-    background .4s ease,
-    transform .4s ease;
-
-}
-
-
-.progress-dot:hover {
-
-  transform:
-    scale(1.3);
-
 }
 
 
 .progress-dot.active {
-
-  width: 34px;
-
-  background:
-    #f5a623;
-
-}
-
-
-/* =====================================
-   LIVE STATUS
-===================================== */
-
-.connection-status {
-
-  position: fixed;
-
-  z-index: 40;
-
-  top: 3vh;
-
-  right: 3vw;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 7px;
-
-  padding:
-    8px
-    12px;
-
-  border-radius: 999px;
+  width: 38px;
 
   background:
-    rgba(0,0,0,.28);
-
-  border:
-    1px solid
-    rgba(255,255,255,.12);
-
-  backdrop-filter:
-    blur(12px);
-
-  color:
-    rgba(255,255,255,.65);
-
-  font-size: 11px;
-
-  font-weight: 800;
-
-  letter-spacing: 1.5px;
-
+    var(--yellow);
 }
 
 
-.status-dot {
-
-  width: 7px;
-  height: 7px;
-
-  border-radius: 50%;
-
-  background: #54e38e;
-
-  box-shadow:
-    0 0 12px
-    rgba(84,227,142,.8);
-
-  animation:
-    statusPulse
-    2s
-    infinite;
-
-}
-
-
-.updated-status {
-
-  position: fixed;
-
-  z-index: 40;
-
-  left: 3vw;
-
-  top: 3vh;
-
-  color:
-    rgba(255,255,255,.35);
-
-  font-size: 11px;
-
-  letter-spacing: 1px;
-
-}
-
-
-/* =====================================
+/* =========================================
    LOADING
-===================================== */
+========================================= */
 
 .loading-screen {
-
   width: 100vw;
   height: 100vh;
 
   display: flex;
 
-  align-items: center;
   justify-content: center;
+  align-items: center;
 
   background:
-
     radial-gradient(
-      circle at center,
-      #222 0%,
-      #0b0b0b 50%,
-      #030303 100%
+      circle,
+      #292929,
+      #090909 70%
     );
-
 }
 
 
 .loading-center {
-
   display: flex;
 
   flex-direction: column;
 
   align-items: center;
-
-  justify-content: center;
-
 }
 
 
 .loading-logo {
-
   width:
     min(
       420px,
-      55vw
+      60vw
     );
 
-  max-height: 160px;
+  max-height:
+    170px;
 
-  object-fit: contain;
+  object-fit:
+    contain;
 
-  margin-bottom: 40px;
+  padding:
+    15px
+    25px;
 
-  filter:
+  border-radius:
+    15px;
 
-    drop-shadow(
-      0 15px 40px
-      rgba(0,0,0,.7)
-    );
+  background:
+    rgba(255,255,255,.55);
+
+  backdrop-filter:
+    blur(12px);
+
+  margin-bottom:
+    40px;
 
   animation:
     logoPulse
     2s
     ease-in-out
-    infinite alternate;
-
+    infinite
+    alternate;
 }
 
 
 .loader {
-
   width: 55px;
   height: 55px;
 
   border:
-    4px solid
+    5px
+    solid
     rgba(255,255,255,.12);
 
   border-top-color:
-    #f5a623;
+    var(--yellow);
 
   border-right-color:
-    #ffd36a;
+    var(--red);
 
-  border-radius: 50%;
+  border-radius:
+    50%;
 
   animation:
     spin
-    .9s
+    .8s
     linear
     infinite;
-
 }
 
 
 .loading-text {
-
-  margin-top: 25px;
+  margin-top:
+    22px;
 
   color:
-    rgba(255,255,255,.62);
+    rgba(255,255,255,.7);
 
-  font-size: 16px;
+  font-size:
+    15px;
 
-  letter-spacing: 2px;
+  font-weight:
+    700;
 
+  letter-spacing:
+    2px;
 }
 
 
-/* =====================================
+/* =========================================
    ERROR
-===================================== */
+========================================= */
 
 .error-screen {
-
   width: 100vw;
   height: 100vh;
 
@@ -933,308 +1082,161 @@ body {
   flex-direction: column;
 
   align-items: center;
-
   justify-content: center;
 
   text-align: center;
 
   background:
-
-    radial-gradient(
-      circle,
-      #1d1d1d,
-      #050505 70%
-    );
-
+    #090909;
 }
 
 
 .error-logo {
-
   width:
-    min(
-      420px,
-      55vw
-    );
+    300px;
 
-  max-height: 150px;
+  max-height:
+    130px;
 
-  object-fit: contain;
+  object-fit:
+    contain;
 
-  margin-bottom: 25px;
+  padding:
+    15px
+    25px;
 
+  border-radius:
+    14px;
+
+  background:
+    rgba(255,255,255,.55);
+
+  margin-bottom:
+    30px;
 }
 
 
 .error-screen h1 {
+  font-size:
+    40px;
 
   margin: 0;
-
-  font-size: 40px;
-
-  font-weight: 800;
-
-  letter-spacing: -1px;
-
 }
 
 
 .error-screen p {
-
-  margin:
-    15px
-    0
-    0;
-
-  font-size: 18px;
-
   color:
     rgba(255,255,255,.6);
-
 }
 
 
 .error-screen button {
-
-  margin-top: 30px;
+  margin-top:
+    20px;
 
   padding:
-    15px
-    28px;
+    14px
+    25px;
 
-  border: 0;
+  border:
+    0;
 
-  border-radius: 10px;
-
-  background:
-    #f5a623;
-
-  color: #111;
-
-  font-size: 15px;
-
-  font-weight: 900;
-
-  letter-spacing: 1px;
-
-  cursor: pointer;
-
-}
-
-
-/* =====================================
-   IDLE SCREEN
-===================================== */
-
-.idle-screen {
-
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 25px;
+  border-radius:
+    8px;
 
   background:
-
-    radial-gradient(
-      circle at center,
-      #262626,
-      #080808 65%,
-      #030303
-    );
-
-}
-
-
-.idle-logo-image {
-
-  width:
-    min(
-      550px,
-      55vw
-    );
-
-  max-height: 180px;
-
-  object-fit: contain;
-
-  filter:
-
-    drop-shadow(
-      0 15px 40px
-      rgba(0,0,0,.6)
-    );
-
-  animation:
-    logoPulse
-    2.5s
-    ease-in-out
-    infinite alternate;
-
-}
-
-
-.idle-message {
-
-  font-size:
-    clamp(
-      20px,
-      2vw,
-      32px
-    );
+    var(--red);
 
   color:
-    rgba(255,255,255,.65);
+    white;
 
+  font-weight:
+    900;
 }
 
 
-/* =====================================
+/* =========================================
    ANIMATIONS
-===================================== */
+========================================= */
 
-@keyframes backgroundZoom {
-
+@keyframes photoZoom {
   from {
-
     transform:
-      scale(1.03);
-
+      scale(1.02);
   }
 
   to {
-
     transform:
-      scale(1.13);
-
+      scale(1.10);
   }
-
 }
 
 
-@keyframes ambientMove {
-
+@keyframes logoAppear {
   from {
-
-    transform:
-      translate(
-        -5%,
-        -5%
-      );
-
-  }
-
-  to {
-
-    transform:
-      translate(
-        30%,
-        25%
-      );
-
-  }
-
-}
-
-
-@keyframes foodGlowMove {
-
-  from {
-
-    transform:
-      translate(
-        10%,
-        10%
-      )
-      scale(.95);
-
-  }
-
-  to {
-
-    transform:
-      translate(
-        -10%,
-        -15%
-      )
-      scale(1.1);
-
-  }
-
-}
-
-
-@keyframes contentEnter {
-
-  from {
-
     opacity: 0;
 
     transform:
-      translateY(60px);
-
-  }
-
-  to {
-
-    opacity: 1;
-
-    transform:
-      translateY(0);
-
-  }
-
-}
-
-
-@keyframes badgeEnter {
-
-  from {
-
-    opacity: 0;
-
-    transform:
-      translateY(25px)
+      translateY(-20px)
       scale(.9);
-
   }
 
   to {
-
     opacity: 1;
 
     transform:
       translateY(0)
       scale(1);
-
   }
-
 }
 
 
-@keyframes titleEnter {
-
+@keyframes contentIn {
   from {
+    opacity: 0;
 
+    transform:
+      translateY(50px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+
+@keyframes badgeIn {
+  from {
+    opacity: 0;
+
+    transform:
+      translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateX(0);
+  }
+}
+
+
+@keyframes titleIn {
+  from {
     opacity: 0;
 
     transform:
       translateY(45px);
 
     filter:
-      blur(10px);
-
+      blur(8px);
   }
 
   to {
-
     opacity: 1;
 
     transform:
@@ -1242,245 +1244,204 @@ body {
 
     filter:
       blur(0);
-
   }
-
 }
 
 
-@keyframes subtitleEnter {
-
+@keyframes subtitleIn {
   from {
-
     opacity: 0;
 
     transform:
-      translateX(-35px);
-
+      translateX(-30px);
   }
 
   to {
-
     opacity: 1;
 
     transform:
       translateX(0);
-
   }
-
 }
 
 
-@keyframes descriptionEnter {
-
+@keyframes paragraphIn {
   from {
+    opacity: 0;
 
+    transform:
+      translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+
+@keyframes offerIn {
+  from {
     opacity: 0;
 
     transform:
       translateY(25px);
-
   }
 
   to {
-
     opacity: 1;
 
     transform:
       translateY(0);
-
   }
-
 }
 
 
-@keyframes bottomEnter {
-
+@keyframes qualityIn {
   from {
-
     opacity: 0;
-
-    transform:
-      translateY(30px);
-
   }
 
   to {
-
     opacity: 1;
-
-    transform:
-      translateY(0);
-
   }
-
 }
 
 
-@keyframes logoEnter {
-
+@keyframes labelIn {
   from {
-
     opacity: 0;
 
     transform:
-      translateY(25px)
-      scale(.88);
-
+      translateX(30px);
   }
 
   to {
-
     opacity: 1;
 
     transform:
-      translateY(0)
-      scale(1);
-
+      translateX(0);
   }
-
 }
 
 
 @keyframes logoPulse {
-
   from {
-
-    opacity: .78;
-
     transform:
-      scale(.985);
-
+      scale(.98);
   }
 
   to {
-
-    opacity: 1;
-
     transform:
-      scale(1.015);
-
+      scale(1.03);
   }
-
 }
 
 
-@keyframes ctaPulse {
-
+@keyframes ctaFloat {
   0%,
   100% {
-
     transform:
-      scale(1);
-
+      translateY(0);
   }
 
   50% {
-
     transform:
-      scale(1.04);
-
+      translateY(-5px);
   }
-
 }
 
 
-@keyframes statusPulse {
-
+@keyframes livePulse {
   0%,
   100% {
-
     opacity: 1;
-
-    transform:
-      scale(1);
-
   }
 
   50% {
-
-    opacity: .45;
-
-    transform:
-      scale(.75);
-
+    opacity: .35;
   }
-
 }
 
 
-@keyframes shineSweep {
+@keyframes yellowMove {
+  from {
+    transform:
+      translate(0,0);
+  }
 
+  to {
+    transform:
+      translate(200px,150px);
+  }
+}
+
+
+@keyframes redMove {
+  from {
+    transform:
+      translate(0,0);
+  }
+
+  to {
+    transform:
+      translate(-150px,-100px);
+  }
+}
+
+
+@keyframes shine {
   0% {
-
     transform:
       translateX(-120%);
-
   }
 
   25%,
   100% {
-
     transform:
       translateX(120%);
-
   }
-
 }
 
 
 @keyframes spin {
-
   to {
-
     transform:
       rotate(360deg);
-
   }
-
 }
 
 
-/* =====================================
-   TV / LARGE SCREEN
-===================================== */
+/* =========================================
+   LARGE ANDROID TV
+========================================= */
 
-@media (
-  min-width: 1600px
-) {
+@media (min-width: 1600px) {
 
   .promotion-content {
-
-    padding-left: 8vw;
-
-    padding-top: 14vh;
-
+    padding-left:
+      8vw;
   }
 
 }
 
 
-/* =====================================
-   REDUCE MOTION
-===================================== */
+/* =========================================
+   REDUCED MOTION
+========================================= */
 
-@media (
-  prefers-reduced-motion: reduce
-) {
+@media (prefers-reduced-motion: reduce) {
 
   *,
   *::before,
   *::after {
-
     animation-duration:
       .01ms !important;
 
     animation-iteration-count:
       1 !important;
-
-    transition-duration:
-      .01ms !important;
-
   }
 
 }
