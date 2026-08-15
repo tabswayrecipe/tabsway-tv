@@ -9,30 +9,18 @@
   },
 
   "promotions": [
-
     {
       "id": 1,
-
       "title": "WEEKEND SPECIAL",
-
       "subtitle": "Good food. Great moments.",
-
       "description": "Bring the family and enjoy something delicious this weekend.",
-
       "price": "$14.99",
-
       "badge": "LIMITED TIME",
-
       "buttonText": "TRY IT TODAY",
-
-      "image": "download.jpeg",
-
+      "image": "images/download.jpeg",
       "enabled": true,
-
       "priority": 1,
-
       "displaySeconds": 8,
-
       "schedule": {
         "enabled": false,
         "start": "00:00",
@@ -42,27 +30,16 @@
 
     {
       "id": 2,
-
       "title": "FAMILY FAVORITE",
-
       "subtitle": "Made fresh for everyone.",
-
       "description": "One of our most-loved meals, prepared fresh to order.",
-
       "price": "$19.99",
-
       "badge": "CUSTOMER FAVORITE",
-
       "buttonText": "ORDER NOW",
-
-      "image": "family.jpg",
-
+      "image": "images/family.jpg",
       "enabled": true,
-
       "priority": 2,
-
       "displaySeconds": 8,
-
       "schedule": {
         "enabled": false,
         "start": "00:00",
@@ -72,33 +49,21 @@
 
     {
       "id": 3,
-
       "title": "LUNCH SPECIAL",
-
       "subtitle": "Perfect for your lunch break.",
-
       "description": "Enjoy a delicious lunch prepared fresh just for you.",
-
       "price": "$12.99",
-
       "badge": "LUNCH SPECIAL",
-
       "buttonText": "ENJOY LUNCH",
-
-      "image": "lunch.jpg",
-
+      "image": "images/lunch.jpg",
       "enabled": true,
-
       "priority": 3,
-
       "displaySeconds": 8,
-
       "schedule": {
         "enabled": true,
         "start": "11:00",
         "end": "15:00"
       }
     }
-
   ]
 }
