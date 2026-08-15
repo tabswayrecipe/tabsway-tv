@@ -8,9 +8,8 @@
   --dark: #21110b;
 
   --shadow-soft: 0 12px 35px rgba(70, 25, 5, 0.18);
-  --shadow-red: 0 14px 35px rgba(227, 27, 35, 0.30);
+  --shadow-red: 0 14px 35px rgba(227, 27, 35, 0.3);
 }
-
 
 /* =====================================================
    RESET
@@ -37,6 +36,7 @@ html {
 
 body {
   min-width: 320px;
+  min-height: 100vh;
 
   font-family:
     Inter,
@@ -52,7 +52,6 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-
 
 /* =====================================================
    APP
@@ -71,9 +70,8 @@ body {
   background: var(--cream);
 }
 
-
 /* =====================================================
-   PROMOTION SCREEN
+   PROMOTION
 ===================================================== */
 
 .promotion {
@@ -90,42 +88,46 @@ body {
   background: #fff3d0;
 }
 
-
 /* =====================================================
-   PROMO IMAGE
+   PROMOTION IMAGE
 
    IMPORTANT:
-   Use an actual <img class="promotion-image">
-   inside .promotion.
+   Your React/HTML must contain:
 
-   This guarantees the image is rendered even when
-   the image comes from src/images.
+   <img
+     className="promotion-image"
+     src={image}
+     alt=""
+   />
+
 ===================================================== */
 
 .promotion-image {
   position: absolute;
 
-  inset: 0;
-
-  z-index: 0;
-
-  display: block;
+  top: 0;
+  left: 0;
 
   width: 100%;
   height: 100%;
+
+  display: block;
+
+  z-index: 0;
 
   object-fit: cover;
   object-position: center center;
 
   max-width: none;
+  max-height: none;
 
   opacity: 1;
-
   visibility: visible;
 
   pointer-events: none;
-
   user-select: none;
+
+  transform: scale(1);
 
   animation:
     backgroundZoom
@@ -134,21 +136,21 @@ body {
     forwards;
 }
 
-
-/* =====================================================
-   IMAGE FALLBACK
-
-   If image is inside a nested element, this helps
-   prevent inherited sizing problems.
-===================================================== */
+/*
+   Prevent other img rules from shrinking
+   the promotion image.
+*/
 
 .promotion img {
   max-width: none;
 }
 
-
 /* =====================================================
-   PHOTO OVERLAY
+   IMAGE OVERLAY
+
+   IMPORTANT:
+   This is translucent so the actual image
+   remains visible.
 ===================================================== */
 
 .photo-overlay {
@@ -156,7 +158,7 @@ body {
 
   inset: 0;
 
-  z-index: 1;
+  z-index: 5;
 
   pointer-events: none;
 
@@ -164,23 +166,22 @@ body {
     linear-gradient(
       90deg,
 
-      rgba(255, 248, 225, 0.88) 0%,
+      rgba(255, 248, 225, 0.90) 0%,
 
-      rgba(255, 248, 225, 0.76) 18%,
+      rgba(255, 248, 225, 0.78) 18%,
 
-      rgba(255, 248, 225, 0.56) 35%,
+      rgba(255, 248, 225, 0.55) 35%,
 
-      rgba(255, 248, 225, 0.28) 50%,
+      rgba(255, 248, 225, 0.25) 52%,
 
-      rgba(255, 255, 255, 0.08) 68%,
+      rgba(255, 255, 255, 0.08) 70%,
 
       rgba(255, 255, 255, 0) 100%
     );
 }
 
-
 /* =====================================================
-   BOTTOM PHOTO OVERLAY
+   BOTTOM OVERLAY
 ===================================================== */
 
 .photo-bottom {
@@ -188,7 +189,7 @@ body {
 
   inset: 0;
 
-  z-index: 2;
+  z-index: 6;
 
   pointer-events: none;
 
@@ -196,17 +197,16 @@ body {
     linear-gradient(
       0deg,
 
-      rgba(42, 12, 5, 0.60) 0%,
+      rgba(42, 12, 5, 0.55) 0%,
 
-      rgba(42, 12, 5, 0.20) 14%,
+      rgba(42, 12, 5, 0.18) 15%,
 
-      transparent 38%
+      rgba(42, 12, 5, 0) 40%
     );
 }
 
-
 /* =====================================================
-   TOP YELLOW LIGHT
+   YELLOW GLOW
 ===================================================== */
 
 .promotion::before {
@@ -220,7 +220,7 @@ body {
   top: -330px;
   left: -250px;
 
-  z-index: 3;
+  z-index: 7;
 
   pointer-events: none;
 
@@ -244,9 +244,8 @@ body {
     alternate;
 }
 
-
 /* =====================================================
-   RED LIGHT
+   RED GLOW
 ===================================================== */
 
 .promotion::after {
@@ -260,7 +259,7 @@ body {
   right: -260px;
   bottom: -280px;
 
-  z-index: 3;
+  z-index: 7;
 
   pointer-events: none;
 
@@ -284,7 +283,6 @@ body {
     alternate;
 }
 
-
 /* =====================================================
    HEADER
 ===================================================== */
@@ -295,7 +293,6 @@ body {
   z-index: 50;
 
   top: 3vh;
-
   left: 5vw;
   right: 5vw;
 
@@ -304,14 +301,12 @@ body {
   display: flex;
 
   align-items: flex-start;
-
   justify-content: space-between;
 
   gap: 35px;
 
   pointer-events: none;
 }
-
 
 /* =====================================================
    LOGO
@@ -332,7 +327,6 @@ body {
   max-height: 90px;
 
   object-fit: contain;
-
   object-position: left center;
 
   flex: 0 0 auto;
@@ -340,17 +334,14 @@ body {
   background: transparent !important;
 
   border: none !important;
-
   outline: none !important;
 
   padding: 0 !important;
-
   margin: 0;
 
   filter:
     drop-shadow(
-      0 7px 14px
-      rgba(80, 30, 0, 0.24)
+      0 7px 14px rgba(80, 30, 0, 0.24)
     );
 
   animation:
@@ -360,9 +351,8 @@ body {
     both;
 }
 
-
 /* =====================================================
-   SPECIAL OFFER
+   HEADER PROMO
 ===================================================== */
 
 .header-promo {
@@ -397,15 +387,11 @@ body {
   color: var(--white);
 
   border:
-    2px solid
-    rgba(255, 210, 28, 0.95);
+    2px solid rgba(255, 210, 28, 0.95);
 
   box-shadow:
-    0 12px 30px
-    rgba(227, 27, 35, 0.32),
-
-    0 0 0 4px
-    rgba(255, 255, 255, 0.20);
+    0 12px 30px rgba(227, 27, 35, 0.32),
+    0 0 0 4px rgba(255, 255, 255, 0.2);
 
   font-size:
     clamp(
@@ -435,7 +421,6 @@ body {
     both;
 }
 
-
 .header-promo-dot {
   display: block;
 
@@ -450,11 +435,8 @@ body {
   background: var(--yellow);
 
   box-shadow:
-    0 0 0 3px
-    rgba(255, 210, 28, 0.18),
-
-    0 0 18px
-    rgba(255, 210, 28, 0.90);
+    0 0 0 3px rgba(255, 210, 28, 0.18),
+    0 0 18px rgba(255, 210, 28, 0.9);
 
   animation:
     pulse
@@ -462,7 +444,6 @@ body {
     ease-in-out
     infinite;
 }
-
 
 .header-promo-label {
   display: block;
@@ -477,7 +458,6 @@ body {
   white-space: nowrap;
 }
 
-
 /* =====================================================
    MAIN CONTENT
 ===================================================== */
@@ -488,11 +468,9 @@ body {
   z-index: 20;
 
   left: 6vw;
-
   top: 19vh;
 
   width: min(52vw, 900px);
-
   max-width: 900px;
 
   max-height: 70vh;
@@ -508,7 +486,6 @@ body {
     both;
 }
 
-
 /* =====================================================
    BADGE
 ===================================================== */
@@ -520,7 +497,6 @@ body {
   justify-content: center;
 
   max-width: 100%;
-
   min-height: 34px;
 
   padding: 9px 18px;
@@ -558,8 +534,7 @@ body {
   overflow-wrap: anywhere;
 
   box-shadow:
-    0 8px 25px
-    rgba(255, 210, 28, 0.32);
+    0 8px 25px rgba(255, 210, 28, 0.32);
 
   animation:
     badgeEntrance
@@ -567,7 +542,6 @@ body {
     0.1s
     both;
 }
-
 
 /* =====================================================
    ACCENT
@@ -592,12 +566,10 @@ body {
   background: var(--red);
 
   box-shadow:
-    0 5px 18px
-    rgba(227, 27, 35, 0.25);
+    0 5px 18px rgba(227, 27, 35, 0.25);
 
   overflow: hidden;
 }
-
 
 .accent::after {
   content: "";
@@ -623,7 +595,6 @@ body {
     ease-in-out
     infinite;
 }
-
 
 /* =====================================================
    TITLE
@@ -654,11 +625,8 @@ body {
   overflow-wrap: anywhere;
 
   text-shadow:
-    0 5px 0
-    rgba(255, 255, 255, 0.72),
-
-    0 12px 25px
-    rgba(100, 30, 0, 0.18);
+    0 5px 0 rgba(255, 255, 255, 0.72),
+    0 12px 25px rgba(100, 30, 0, 0.18);
 
   animation:
     titleEntrance
@@ -666,7 +634,6 @@ body {
     0.1s
     both;
 }
-
 
 /* =====================================================
    SUBTITLE
@@ -693,8 +660,7 @@ body {
   overflow-wrap: anywhere;
 
   text-shadow:
-    0 2px 8px
-    rgba(255, 255, 255, 0.35);
+    0 2px 8px rgba(255, 255, 255, 0.35);
 
   animation:
     subtitleEntrance
@@ -702,7 +668,6 @@ body {
     0.35s
     both;
 }
-
 
 /* =====================================================
    DESCRIPTION
@@ -725,16 +690,14 @@ body {
 
   font-weight: 600;
 
-  color:
-    rgba(45, 20, 10, 0.86);
+  color: rgba(45, 20, 10, 0.86);
 
   white-space: normal;
 
   overflow-wrap: anywhere;
 
   text-shadow:
-    0 1px 3px
-    rgba(255, 255, 255, 0.30);
+    0 1px 3px rgba(255, 255, 255, 0.3);
 
   animation:
     descriptionEntrance
@@ -742,7 +705,6 @@ body {
     0.5s
     both;
 }
-
 
 /* =====================================================
    OFFER
@@ -756,7 +718,6 @@ body {
   display: flex;
 
   align-items: center;
-
   justify-content: flex-start;
 
   flex-wrap: wrap;
@@ -764,7 +725,6 @@ body {
   gap: 18px;
 
   width: 100%;
-
   max-width: 850px;
 
   margin-top: 22px;
@@ -778,7 +738,6 @@ body {
     both;
 }
 
-
 /* =====================================================
    PRICE
 ===================================================== */
@@ -789,7 +748,6 @@ body {
   flex-direction: column;
 
   align-items: flex-start;
-
   justify-content: center;
 
   flex: 0 0 auto;
@@ -799,10 +757,8 @@ body {
   line-height: 0.9;
 
   text-shadow:
-    0 5px 20px
-    rgba(80, 20, 0, 0.15);
+    0 5px 20px rgba(80, 20, 0, 0.15);
 }
-
 
 .price small {
   display: block;
@@ -819,7 +775,6 @@ body {
 
   letter-spacing: 2px;
 }
-
 
 .price strong {
   display: block;
@@ -839,7 +794,6 @@ body {
 
   white-space: nowrap;
 }
-
 
 /* =====================================================
    CTA
@@ -865,8 +819,7 @@ body {
   padding: 14px 22px;
 
   border:
-    2px solid
-    rgba(255, 210, 28, 0.85);
+    2px solid rgba(255, 210, 28, 0.85);
 
   border-radius: 12px;
 
@@ -909,17 +862,14 @@ body {
     box-shadow 0.3s ease;
 }
 
-
 .cta:hover {
   transform:
     translateY(-5px)
     scale(1.03);
 
   box-shadow:
-    0 18px 40px
-    rgba(227, 27, 35, 0.42);
+    0 18px 40px rgba(227, 27, 35, 0.42);
 }
-
 
 /* =====================================================
    FOOTER
@@ -953,20 +903,16 @@ body {
   text-align: center;
 
   text-shadow:
-    0 2px 5px
-    rgba(0, 0, 0, 0.55);
+    0 2px 5px rgba(0, 0, 0, 0.55);
 
   pointer-events: none;
 }
 
-
 .footer-line {
   width: 180px;
-
   height: 4px;
 
   flex: 1 1 180px;
-
   max-width: 180px;
 
   border-radius: 999px;
@@ -985,7 +931,6 @@ body {
     infinite
     alternate;
 }
-
 
 /* =====================================================
    SHINE
@@ -1018,7 +963,6 @@ body {
     infinite;
 }
 
-
 /* =====================================================
    PROGRESS
 ===================================================== */
@@ -1029,7 +973,6 @@ body {
   z-index: 100;
 
   left: 50%;
-
   bottom: 28px;
 
   transform: translateX(-50%);
@@ -1049,10 +992,8 @@ body {
     rgba(33, 17, 11, 0.35);
 
   backdrop-filter: blur(10px);
-
   -webkit-backdrop-filter: blur(10px);
 }
-
 
 .progress-dot {
   width: 8px;
@@ -1072,7 +1013,6 @@ body {
   transition: all 0.3s ease;
 }
 
-
 .progress-dot.active {
   width: 26px;
 
@@ -1081,10 +1021,8 @@ body {
   background: var(--yellow);
 
   box-shadow:
-    0 0 12px
-    rgba(255, 210, 28, 0.85);
+    0 0 12px rgba(255, 210, 28, 0.85);
 }
-
 
 /* =====================================================
    CONNECTION STATUS
@@ -1107,8 +1045,7 @@ body {
   padding: 7px 11px;
 
   border:
-    1px solid
-    rgba(255, 255, 255, 0.30);
+    1px solid rgba(255, 255, 255, 0.3);
 
   border-radius: 999px;
 
@@ -1124,10 +1061,8 @@ body {
   letter-spacing: 1.5px;
 
   backdrop-filter: blur(10px);
-
   -webkit-backdrop-filter: blur(10px);
 }
-
 
 .status-dot {
   width: 7px;
@@ -1138,8 +1073,7 @@ body {
   background: #45e65b;
 
   box-shadow:
-    0 0 10px
-    rgba(69, 230, 91, 0.9);
+    0 0 10px rgba(69, 230, 91, 0.9);
 
   animation:
     pulse
@@ -1147,7 +1081,6 @@ body {
     ease-in-out
     infinite;
 }
-
 
 /* =====================================================
    UPDATED STATUS
@@ -1171,13 +1104,11 @@ body {
   letter-spacing: 0.8px;
 
   text-shadow:
-    0 2px 4px
-    rgba(0, 0, 0, 0.6);
+    0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-
 /* =====================================================
-   LOADING / ERROR / IDLE
+   ERROR / IDLE
 ===================================================== */
 
 .error-screen,
@@ -1208,7 +1139,6 @@ body {
   color: var(--dark);
 }
 
-
 .error-logo,
 .idle-logo-image {
   width:
@@ -1227,11 +1157,9 @@ body {
 
   filter:
     drop-shadow(
-      0 8px 20px
-      rgba(80, 30, 0, 0.16)
+      0 8px 20px rgba(80, 30, 0, 0.16)
     );
 }
-
 
 .error-screen h1 {
   margin: 0;
@@ -1246,7 +1174,6 @@ body {
     );
 }
 
-
 .error-screen p,
 .idle-message {
   max-width: 600px;
@@ -1259,7 +1186,6 @@ body {
 
   font-weight: 600;
 }
-
 
 .error-screen button {
   border: none;
@@ -1279,7 +1205,6 @@ body {
   box-shadow: var(--shadow-red);
 }
 
-
 .idle-message {
   color: var(--red);
 
@@ -1292,7 +1217,6 @@ body {
 
   font-weight: 900;
 }
-
 
 /* =====================================================
    ANIMATIONS
@@ -1308,23 +1232,23 @@ body {
   }
 }
 
-
 @keyframes logoEntrance {
   from {
     opacity: 0;
+
     transform:
       translateY(-25px)
-      scale(0.90);
+      scale(0.9);
   }
 
   to {
     opacity: 1;
+
     transform:
       translateY(0)
       scale(1);
   }
 }
-
 
 @keyframes pillEntrance {
   from {
@@ -1344,7 +1268,6 @@ body {
   }
 }
 
-
 @keyframes contentEntrance {
   from {
     opacity: 0;
@@ -1361,14 +1284,13 @@ body {
   }
 }
 
-
 @keyframes badgeEntrance {
   from {
     opacity: 0;
 
     transform:
       translateY(-20px)
-      scale(0.90);
+      scale(0.9);
   }
 
   to {
@@ -1379,7 +1301,6 @@ body {
       scale(1);
   }
 }
-
 
 @keyframes titleEntrance {
   from {
@@ -1399,7 +1320,6 @@ body {
   }
 }
 
-
 @keyframes subtitleEntrance {
   from {
     opacity: 0;
@@ -1415,7 +1335,6 @@ body {
       translateX(0);
   }
 }
-
 
 @keyframes descriptionEntrance {
   from {
@@ -1433,7 +1352,6 @@ body {
   }
 }
 
-
 @keyframes offerEntrance {
   from {
     opacity: 0;
@@ -1450,7 +1368,6 @@ body {
   }
 }
 
-
 @keyframes ctaFloat {
   0%,
   100% {
@@ -1461,7 +1378,6 @@ body {
     transform: translateY(-4px);
   }
 }
-
 
 @keyframes pulse {
   0%,
@@ -1475,7 +1391,6 @@ body {
     opacity: 0.65;
   }
 }
-
 
 @keyframes yellowGlow {
   from {
@@ -1491,7 +1406,6 @@ body {
   }
 }
 
-
 @keyframes redGlow {
   from {
     transform:
@@ -1506,7 +1420,6 @@ body {
   }
 }
 
-
 @keyframes accentMove {
   0% {
     left: -100%;
@@ -1518,7 +1431,6 @@ body {
   }
 }
 
-
 @keyframes footerGlow {
   from {
     opacity: 0.55;
@@ -1528,11 +1440,9 @@ body {
     opacity: 1;
 
     box-shadow:
-      0 0 15px
-      rgba(255, 210, 28, 0.50);
+      0 0 15px rgba(255, 210, 28, 0.5);
   }
 }
-
 
 @keyframes shine {
   0% {
@@ -1545,45 +1455,35 @@ body {
   }
 }
 
-
 /* =====================================================
-   LARGE TV — 1920 x 1080
+   LARGE TV
 ===================================================== */
 
 @media (min-width: 1800px) {
-
   .tv-header {
     top: 3.5vh;
     left: 5vw;
     right: 5vw;
   }
 
-
   .header-logo {
     width: 260px;
     max-height: 90px;
   }
 
-
   .header-promo {
     min-height: 52px;
-
     padding: 13px 23px;
-
     font-size: 14px;
   }
 
-
   .promotion-content {
     left: 6vw;
-
     top: 18vh;
 
     width: min(52vw, 950px);
-
     max-width: 950px;
   }
-
 
   .promotion-content h1 {
     font-size:
@@ -1594,7 +1494,6 @@ body {
       );
   }
 
-
   .promotion-content h2 {
     font-size:
       clamp(
@@ -1603,7 +1502,6 @@ body {
         46px
       );
   }
-
 
   .promotion-content p {
     max-width: 720px;
@@ -1616,12 +1514,10 @@ body {
       );
   }
 
-
   .offer {
     gap: 22px;
     margin-top: 25px;
   }
-
 
   .cta {
     min-height: 56px;
@@ -1629,26 +1525,21 @@ body {
   }
 }
 
-
 /* =====================================================
    TABLET / SMALL TV
 ===================================================== */
 
 @media (max-width: 1100px) {
-
   .tv-header {
     top: 3vh;
-
     left: 5vw;
     right: 5vw;
   }
-
 
   .header-logo {
     width: 180px;
     max-height: 75px;
   }
-
 
   .header-promo {
     min-height: 44px;
@@ -1660,17 +1551,13 @@ body {
     font-size: 11px;
   }
 
-
   .promotion-content {
     left: 5vw;
-
     top: 19vh;
 
     width: 60vw;
-
     max-width: 700px;
   }
-
 
   .promotion-content h1 {
     font-size:
@@ -1683,7 +1570,6 @@ body {
     letter-spacing: -2px;
   }
 
-
   .promotion-content h2 {
     font-size:
       clamp(
@@ -1692,7 +1578,6 @@ body {
         38px
       );
   }
-
 
   .promotion-content p {
     font-size:
@@ -1704,13 +1589,11 @@ body {
   }
 }
 
-
 /* =====================================================
    MOBILE
 ===================================================== */
 
 @media (max-width: 700px) {
-
   .tv-header {
     top: 3vh;
 
@@ -1720,47 +1603,42 @@ body {
     min-height: 65px;
   }
 
-
   .header-logo {
     width: 150px;
     max-height: 65px;
   }
 
-
   .header-promo {
     display: none;
   }
 
+  /*
+     Keep the image visible on mobile.
+  */
 
   .promotion-image {
     object-position: center center;
   }
 
-
   .photo-overlay {
     background:
       linear-gradient(
         180deg,
-        rgba(255, 248, 225, 0.88) 0%,
-        rgba(255, 248, 225, 0.65) 30%,
-        rgba(255, 248, 225, 0.25) 65%,
-        rgba(42, 12, 5, 0.20) 100%
+        rgba(255, 248, 225, 0.82) 0%,
+        rgba(255, 248, 225, 0.62) 30%,
+        rgba(255, 248, 225, 0.22) 65%,
+        rgba(42, 12, 5, 0.2) 100%
       );
   }
 
-
   .promotion-content {
     left: 6vw;
-
     top: 18vh;
 
     width: 88vw;
-
     max-width: none;
-
     max-height: 68vh;
   }
-
 
   .promotion-content h1 {
     font-size:
@@ -1773,7 +1651,6 @@ body {
     letter-spacing: -2px;
   }
 
-
   .promotion-content h2 {
     font-size:
       clamp(
@@ -1783,7 +1660,6 @@ body {
       );
   }
 
-
   .promotion-content p {
     font-size: 15px;
 
@@ -1792,12 +1668,10 @@ body {
     line-height: 1.35;
   }
 
-
   .offer {
     gap: 12px;
     margin-top: 16px;
   }
-
 
   .price strong {
     font-size:
@@ -1807,7 +1681,6 @@ body {
         55px
       );
   }
-
 
   .cta {
     min-width: 150px;
@@ -1819,46 +1692,38 @@ body {
     font-size: 13px;
   }
 
-
   .tv-footer {
     display: none;
   }
-
 
   .connection-status {
     top: 12px;
     right: 12px;
   }
 
-
   .updated-status {
     display: none;
   }
 }
-
 
 /* =====================================================
    SHORT TV
 ===================================================== */
 
 @media (max-height: 700px) {
-
   .tv-header {
     top: 2.5vh;
     min-height: 65px;
   }
 
-
   .header-logo {
     max-height: 65px;
   }
-
 
   .promotion-content {
     top: 15.5vh;
     max-height: 72vh;
   }
-
 
   .promotion-content h1 {
     font-size:
@@ -1871,7 +1736,6 @@ body {
     margin: 10px 0 6px;
   }
 
-
   .promotion-content h2 {
     font-size:
       clamp(
@@ -1881,7 +1745,6 @@ body {
       );
   }
 
-
   .promotion-content p {
     margin-top: 10px;
 
@@ -1890,11 +1753,9 @@ body {
     line-height: 1.3;
   }
 
-
   .offer {
     margin-top: 14px;
   }
-
 
   .cta {
     min-height: 45px;
@@ -1902,29 +1763,24 @@ body {
     padding: 11px 17px;
   }
 
-
   .tv-footer {
     bottom: 2vh;
   }
 }
-
 
 /* =====================================================
    LARGE + SHORT TV
 ===================================================== */
 
 @media (min-width: 1200px) and (max-height: 700px) {
-
   .promotion-content {
     left: 6vw;
 
     top: 15vh;
 
     width: 52vw;
-
     max-width: 900px;
   }
-
 
   .promotion-content h1 {
     font-size:
@@ -1935,7 +1791,6 @@ body {
       );
   }
 
-
   .promotion-content h2 {
     font-size:
       clamp(
@@ -1945,25 +1800,20 @@ body {
       );
   }
 
-
   .promotion-content p {
     max-width: 650px;
-
     font-size: 16px;
   }
 }
-
 
 /* =====================================================
    EXTRA SMALL
 ===================================================== */
 
 @media (max-width: 450px) {
-
   .header-logo {
     width: 125px;
   }
-
 
   .promotion-content {
     left: 5vw;
@@ -1972,7 +1822,6 @@ body {
 
     top: 17vh;
   }
-
 
   .promotion-content h1 {
     font-size:
@@ -1983,43 +1832,33 @@ body {
       );
   }
 
-
   .promotion-content h2 {
     font-size: 20px;
   }
-
 
   .promotion-content p {
     font-size: 14px;
   }
 
-
   .offer {
     align-items: flex-start;
-
     flex-direction: column;
   }
-
 
   .cta {
     width: auto;
   }
 }
 
-
 /* =====================================================
    REDUCED MOTION
 ===================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
-
   *::before,
-
   *::after {
     animation: none !important;
-
     transition: none !important;
   }
 }
