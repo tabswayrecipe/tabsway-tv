@@ -1,40 +1,27 @@
 import { ArrowRight } from "lucide-react";
 
-import downloadImage from "../assets/download.jpeg";
-//import familyImage from "../assets/family.jpg";
-//import lunchImage from "../assets/lunch.jpg";
-import logoImage from "../assets/logo_2.png";
+const BASE_URL =
+  import.meta.env.BASE_URL || "/";
 
 
 /* =====================================================
-   PROMOTION IMAGE MAP
+   ASSET URL
 ===================================================== */
 
-const PROMOTION_IMAGES = {
-  "download.jpeg": downloadImage,
-  "family.jpg": familyImage,
-  "lunch.jpg": lunchImage,
-};
+function getAssetUrl(path) {
 
-
-/* =====================================================
-   GET PROMOTION IMAGE
-===================================================== */
-
-function getPromotionImage(image) {
-
-  if (!image) {
+  if (!path) {
     return "";
   }
 
-  const value = String(image).trim();
+  const value =
+    String(path).trim();
 
   if (!value) {
     return "";
   }
 
-
-  /* External image */
+  /* External URL */
 
   if (
     value.startsWith("http://") ||
@@ -44,23 +31,30 @@ function getPromotionImage(image) {
     return value;
   }
 
-
   /*
-   * Handles:
+   * Remove any old paths from the JSON.
    *
-   * download.jpeg
-   * /download.jpeg
-   * images/download.jpeg
-   * /tabsway-tv/images/download.jpeg
+   * Examples:
+   *
+   * family.jpg
+   * /images/family.jpg
+   * /tabsway-tv/images/family.jpg
    */
 
-  const filename = value
-    .split("/")
-    .pop()
-    .trim();
+  const filename =
+    value
+      .split("/")
+      .pop()
+      .trim();
 
 
-  return PROMOTION_IMAGES[filename] || "";
+  const base =
+    BASE_URL.endsWith("/")
+      ? BASE_URL
+      : `${BASE_URL}/`;
+
+
+  return `${base}images/${filename}`;
 }
 
 
@@ -69,64 +63,48 @@ function getPromotionImage(image) {
 ===================================================== */
 
 export default function PromotionCard({
-  promotion = {},
+  promotion = {}
 }) {
 
-  const imageUrl = getPromotionImage(
-    promotion.image
-  );
+  const imageUrl =
+    getAssetUrl(
+      promotion.image
+    );
+
+
+  const logoUrl =
+    `${BASE_URL}images/logo_2.png`;
 
 
   return (
+
     <main className="promotion">
 
 
       {/* =================================================
-          FOOD BACKGROUND
+          FOOD IMAGE
       ================================================= */}
 
       {imageUrl && (
+
         <div
           className="promotion-background"
           style={{
             backgroundImage:
-              `url("${imageUrl}")`,
+              `url("${imageUrl}")`
           }}
-          aria-hidden="true"
         />
+
       )}
 
 
       {/* =================================================
-          NO IMAGE FALLBACK
+          OVERLAYS
       ================================================= */}
 
-      {!imageUrl && (
-        <div
-          className="promotion-background promotion-background-fallback"
-          aria-hidden="true"
-        />
-      )}
+      <div className="photo-overlay" />
 
-
-      {/* =================================================
-          PHOTO OVERLAY
-      ================================================= */}
-
-      <div
-        className="photo-overlay"
-        aria-hidden="true"
-      />
-
-
-      {/* =================================================
-          BOTTOM OVERLAY
-      ================================================= */}
-
-      <div
-        className="photo-bottom"
-        aria-hidden="true"
-      />
+      <div className="photo-bottom" />
 
 
       {/* =================================================
@@ -135,12 +113,10 @@ export default function PromotionCard({
 
       <div
         className="yellow-glow"
-        aria-hidden="true"
       />
 
       <div
         className="red-glow"
-        aria-hidden="true"
       />
 
 
@@ -151,37 +127,27 @@ export default function PromotionCard({
       <header className="tv-header">
 
 
-        {/* =================================================
-            LOGO
-        ================================================= */}
+        {/* LOGO */}
 
         <img
-          src={logoImage}
+          src={logoUrl}
           alt="TabsWay Kitchen"
           className="header-logo"
           draggable="false"
         />
 
 
-        {/* =================================================
-            SPECIAL OFFER
-        ================================================= */}
+        {/* SPECIAL OFFER */}
 
-        <div
-          className="header-promo"
-          role="status"
-          aria-label={
-            promotion.headerText ||
-            "Special Offer"
-          }
-        >
+        <div className="header-promo">
 
           <span
             className="header-promo-dot"
-            aria-hidden="true"
           />
 
-          <span className="header-promo-label">
+          <span
+            className="header-promo-label"
+          >
             {promotion.headerText ||
               "SPECIAL OFFER"}
           </span>
@@ -193,69 +159,68 @@ export default function PromotionCard({
 
 
       {/* =================================================
-          MAIN CONTENT
+          CONTENT
       ================================================= */}
 
-      <section className="promotion-content">
+      <section
+        className="promotion-content"
+      >
 
 
-        {/* =================================================
-            BADGE
-        ================================================= */}
+        {/* BADGE */}
 
         {promotion.badge && (
+
           <div className="promo-badge">
+
             {promotion.badge}
+
           </div>
+
         )}
 
 
-        {/* =================================================
-            ACCENT
-        ================================================= */}
+        {/* ACCENT */}
 
         <div
           className="accent"
-          aria-hidden="true"
         />
 
 
-        {/* =================================================
-            TITLE
-        ================================================= */}
+        {/* TITLE */}
 
         {promotion.title && (
+
           <h1>
             {promotion.title}
           </h1>
+
         )}
 
 
-        {/* =================================================
-            SUBTITLE
-        ================================================= */}
+        {/* SUBTITLE */}
 
         {promotion.subtitle && (
+
           <h2>
             {promotion.subtitle}
           </h2>
+
         )}
 
 
-        {/* =================================================
-            DESCRIPTION
-        ================================================= */}
+        {/* DESCRIPTION */}
 
         {promotion.description && (
+
           <p className="description">
             {promotion.description}
           </p>
+
         )}
 
 
-        {/* =================================================
-            OFFER
-        ================================================= */}
+        {/* OFFER */}
 
         {(promotion.price ||
           promotion.buttonText) && (
@@ -263,11 +228,10 @@ export default function PromotionCard({
           <div className="offer">
 
 
-            {/* =================================================
-                PRICE
-            ================================================= */}
+            {/* PRICE */}
 
             {promotion.price && (
+
               <div className="price">
 
                 <small>
@@ -280,18 +244,15 @@ export default function PromotionCard({
                 </strong>
 
               </div>
+
             )}
 
 
-            {/* =================================================
-                CTA
-            ================================================= */}
+            {/* BUTTON */}
 
             {promotion.buttonText && (
-              <div
-                className="cta"
-                role="presentation"
-              >
+
+              <div className="cta">
 
                 <span>
                   {promotion.buttonText}
@@ -300,16 +261,15 @@ export default function PromotionCard({
                 <ArrowRight
                   size={23}
                   strokeWidth={3}
-                  aria-hidden="true"
                 />
 
               </div>
+
             )}
 
-
           </div>
-        )}
 
+        )}
 
       </section>
 
@@ -320,34 +280,25 @@ export default function PromotionCard({
 
       <footer className="tv-footer">
 
-        <div
-          className="footer-line"
-          aria-hidden="true"
-        />
+        <div className="footer-line" />
 
         <span>
           {promotion.footerText ||
             "FRESH • DELICIOUS • MADE WITH CARE"}
         </span>
 
-        <div
-          className="footer-line"
-          aria-hidden="true"
-        />
+        <div className="footer-line" />
 
       </footer>
 
 
       {/* =================================================
-          SHINE EFFECT
+          SHINE
       ================================================= */}
 
-      <div
-        className="shine"
-        aria-hidden="true"
-      />
-
+      <div className="shine" />
 
     </main>
+
   );
 }
