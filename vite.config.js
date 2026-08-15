@@ -4,5 +4,10 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
 
-  base: "/tabsway-tv/"
+  base: "/tabsway-tv/",
+
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+  },
 });
