@@ -12,7 +12,7 @@ function getImageUrl(image) {
     return image;
   }
 
-  return `${BASE_URL}${image}`;
+  return `${BASE_URL}${image.replace(/^\/+/, "")}`;
 }
 
 export default function PromotionCard({ promotion }) {
@@ -22,14 +22,19 @@ export default function PromotionCard({ promotion }) {
     <main
       className="promotion"
       style={{
-        backgroundImage: `url("${imageUrl}")`,
+        backgroundImage: imageUrl
+          ? `url("${imageUrl}")`
+          : "none",
       }}
     >
-      {/* Background */}
       <div className="photo-overlay" />
       <div className="photo-bottom" />
 
-      {/* Header */}
+      {/* Decorative lights */}
+      <div className="yellow-glow" />
+      <div className="red-glow" />
+
+      {/* HEADER */}
       <header className="tv-header">
 
         <img
@@ -46,7 +51,7 @@ export default function PromotionCard({ promotion }) {
       </header>
 
 
-      {/* Main content */}
+      {/* CONTENT */}
       <section className="promotion-content">
 
         {promotion.badge && (
@@ -57,9 +62,11 @@ export default function PromotionCard({ promotion }) {
 
         <div className="accent" />
 
-        <h1>
-          {promotion.title}
-        </h1>
+        {promotion.title && (
+          <h1>
+            {promotion.title}
+          </h1>
+        )}
 
         {promotion.subtitle && (
           <h2>
@@ -68,7 +75,7 @@ export default function PromotionCard({ promotion }) {
         )}
 
         {promotion.description && (
-          <p>
+          <p className="description">
             {promotion.description}
           </p>
         )}
@@ -78,14 +85,14 @@ export default function PromotionCard({ promotion }) {
           {promotion.price && (
             <div className="price">
               <small>ONLY</small>
-              {promotion.price}
+              <strong>{promotion.price}</strong>
             </div>
           )}
 
           {promotion.buttonText && (
             <div className="cta">
-              {promotion.buttonText}
-              <ArrowRight size={24} />
+              <span>{promotion.buttonText}</span>
+              <ArrowRight size={23} />
             </div>
           )}
 
@@ -94,7 +101,7 @@ export default function PromotionCard({ promotion }) {
       </section>
 
 
-      {/* Bottom branding */}
+      {/* BOTTOM */}
       <footer className="tv-footer">
 
         <div className="footer-line" />
@@ -107,8 +114,6 @@ export default function PromotionCard({ promotion }) {
 
       </footer>
 
-
-      {/* Screen shine */}
       <div className="shine" />
 
     </main>
