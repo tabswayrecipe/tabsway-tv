@@ -1,0 +1,839 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family:
+    Inter,
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background: #050505;
+
+  color: white;
+}
+
+.app {
+  width: 100vw;
+  height: 100vh;
+
+  overflow: hidden;
+
+  background: #050505;
+}
+
+
+/* =========================
+   PROMOTION
+========================= */
+
+.promotion {
+
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  background-size: cover;
+  background-position: center;
+
+  overflow: hidden;
+
+  animation:
+    backgroundZoom
+    12s
+    ease-out
+    forwards;
+}
+
+
+/* =========================
+   IMAGE
+========================= */
+
+.image-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.88) 0%,
+      rgba(0,0,0,.72) 35%,
+      rgba(0,0,0,.28) 75%,
+      rgba(0,0,0,.10) 100%
+    );
+
+  z-index: 1;
+}
+
+
+.image-overlay::after {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      0deg,
+      rgba(0,0,0,.85),
+      transparent 45%
+    );
+}
+
+
+/* =========================
+   AMBIENT LIGHT
+========================= */
+
+.ambient-light {
+
+  position: absolute;
+
+  width: 70vw;
+  height: 70vw;
+
+  left: -25vw;
+  top: -25vw;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,170,40,.20),
+      transparent 65%
+    );
+
+  filter: blur(50px);
+
+  animation:
+    ambientMove
+    9s
+    ease-in-out
+    infinite alternate;
+
+  z-index: 1;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.promotion-content {
+
+  position: relative;
+
+  z-index: 3;
+
+  width: 55%;
+
+  min-width: 550px;
+
+  padding-left: 7vw;
+
+  padding-top: 12vh;
+
+  animation:
+    contentEnter
+    1s
+    cubic-bezier(.16,1,.3,1)
+    both;
+}
+
+
+/* =========================
+   BADGE
+========================= */
+
+.badge {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding:
+    10px
+    18px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255,255,255,.12);
+
+  border:
+    1px solid
+    rgba(255,255,255,.25);
+
+  backdrop-filter:
+    blur(12px);
+
+  color: #ffd36a;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+
+  animation:
+    badgeEnter
+    .8s
+    .15s
+    both;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+h1 {
+
+  margin:
+    30px
+    0
+    10px;
+
+  font-size:
+    clamp(
+      58px,
+      7vw,
+      120px
+    );
+
+  line-height: .92;
+
+  font-weight: 900;
+
+  letter-spacing: -4px;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 10px 50px
+    rgba(0,0,0,.55);
+
+  animation:
+    titleEnter
+    .9s
+    .2s
+    both;
+}
+
+
+/* =========================
+   SUBTITLE
+========================= */
+
+h2 {
+
+  margin: 0;
+
+  font-size:
+    clamp(
+      26px,
+      3vw,
+      50px
+    );
+
+  font-weight: 600;
+
+  color: #ffd66d;
+
+  animation:
+    subtitleEnter
+    .8s
+    .4s
+    both;
+}
+
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+p {
+
+  max-width: 750px;
+
+  margin:
+    25px
+    0
+    0;
+
+  font-size:
+    clamp(
+      18px,
+      1.5vw,
+      28px
+    );
+
+  line-height: 1.55;
+
+  color:
+    rgba(255,255,255,.84);
+
+  animation:
+    descriptionEnter
+    .8s
+    .55s
+    both;
+}
+
+
+/* =========================
+   BOTTOM ROW
+========================= */
+
+.bottom-row {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 35px;
+
+  margin-top: 40px;
+
+  animation:
+    bottomEnter
+    .8s
+    .7s
+    both;
+}
+
+
+.price {
+
+  font-size:
+    clamp(
+      42px,
+      4vw,
+      72px
+    );
+
+  font-weight: 900;
+
+  color: white;
+
+  text-shadow:
+    0 4px 25px
+    rgba(0,0,0,.5);
+}
+
+
+.cta {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding:
+    16px
+    24px;
+
+  border-radius: 12px;
+
+  background:
+    #f5a623;
+
+  color: #111;
+
+  font-size: 18px;
+
+  font-weight: 900;
+
+  letter-spacing: 1px;
+
+  box-shadow:
+    0 10px 35px
+    rgba(245,166,35,.25);
+
+  animation:
+    ctaPulse
+    2.5s
+    1.5s
+    infinite;
+}
+
+
+/* =========================
+   BRAND
+========================= */
+
+.bottom-brand {
+
+  position: absolute;
+
+  z-index: 4;
+
+  right: 5vw;
+  bottom: 4vh;
+
+  font-size: 15px;
+
+  letter-spacing: 4px;
+
+  font-weight: 800;
+
+  color:
+    rgba(255,255,255,.75);
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress {
+
+  position: fixed;
+
+  z-index: 20;
+
+  bottom: 3vh;
+
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  display: flex;
+
+  gap: 8px;
+}
+
+
+.progress-dot {
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255,255,255,.35);
+
+  transition:
+    all .4s ease;
+}
+
+
+.progress-dot.active {
+
+  width: 30px;
+
+  border-radius: 999px;
+
+  background:
+    #f5a623;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading-screen {
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle,
+      #222,
+      #050505 70%
+    );
+}
+
+
+.loader {
+
+  width: 60px;
+  height: 60px;
+
+  border:
+    4px solid
+    rgba(255,255,255,.12);
+
+  border-top-color:
+    #f5a623;
+
+  border-radius: 50%;
+
+  animation:
+    spin
+    1s
+    linear
+    infinite;
+}
+
+
+.loading-text {
+
+  margin-top: 25px;
+
+  color:
+    rgba(255,255,255,.65);
+
+  font-size: 18px;
+
+  letter-spacing: 2px;
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.error-screen {
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  background:
+    #080808;
+}
+
+
+.error-logo {
+
+  font-size: 48px;
+
+  font-weight: 900;
+
+  color: #f5a623;
+
+  letter-spacing: 4px;
+}
+
+
+.error-screen h1 {
+
+  margin:
+    30px
+    0
+    10px;
+
+  font-size: 38px;
+
+  letter-spacing: 0;
+}
+
+
+.error-screen p {
+
+  margin: 0;
+
+  font-size: 18px;
+}
+
+
+.error-screen button {
+
+  margin-top: 30px;
+
+  padding:
+    14px
+    25px;
+
+  border: 0;
+
+  border-radius: 10px;
+
+  background: #f5a623;
+
+  color: #111;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+/* =========================
+   IDLE
+========================= */
+
+.idle-screen {
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 20px;
+
+  background:
+    radial-gradient(
+      circle,
+      #262626,
+      #050505
+    );
+
+  font-size: 24px;
+}
+
+
+.idle-logo {
+
+  font-size: 60px;
+
+  font-weight: 900;
+
+  color: #f5a623;
+
+  letter-spacing: 4px;
+}
+
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes backgroundZoom {
+
+  from {
+    transform: scale(1.04);
+  }
+
+  to {
+    transform: scale(1.13);
+  }
+}
+
+
+@keyframes ambientMove {
+
+  from {
+    transform:
+      translate(
+        -5%,
+        -5%
+      );
+  }
+
+  to {
+    transform:
+      translate(
+        25%,
+        20%
+      );
+  }
+}
+
+
+@keyframes contentEnter {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(50px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+  }
+}
+
+
+@keyframes badgeEnter {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(20px)
+      scale(.9);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+}
+
+
+@keyframes titleEnter {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(40px);
+
+    filter:
+      blur(8px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+    filter:
+      blur(0);
+
+  }
+}
+
+
+@keyframes subtitleEnter {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateX(-30px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateX(0);
+
+  }
+}
+
+
+@keyframes descriptionEnter {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(20px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+  }
+}
+
+
+@keyframes bottomEnter {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(25px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+  }
+}
+
+
+@keyframes ctaPulse {
+
+  0%,
+  100% {
+
+    transform:
+      scale(1);
+
+  }
+
+  50% {
+
+    transform:
+      scale(1.04);
+
+  }
+}
+
+
+@keyframes spin {
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
