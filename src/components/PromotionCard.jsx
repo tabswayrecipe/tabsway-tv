@@ -5,17 +5,17 @@ const BASE_URL =
 
 
 /* =====================================================
-   IMAGE URL
+   BUILD PUBLIC ASSET URL
 ===================================================== */
 
-function getImageUrl(image) {
+function getAssetUrl(path) {
 
-  if (!image) {
+  if (!path) {
     return "";
   }
 
-  const value =
-    String(image).trim();
+  let value =
+    String(path).trim();
 
   if (!value) {
     return "";
@@ -26,30 +26,41 @@ function getImageUrl(image) {
 
   if (
     value.startsWith("http://") ||
-    value.startsWith("https://")
+    value.startsWith("https://") ||
+    value.startsWith("data:")
   ) {
     return value;
   }
 
 
   /*
-   * Get only the filename.
+   * Remove old GitHub Pages paths.
    *
-   * This means all of these work:
+   * Example:
    *
-   * download.jpeg
+   * /tabsway-tv/images/family.jpg
    *
-   * /images/download.jpeg
+   * becomes:
    *
-   * /tabsway-tv/images/download.jpeg
+   * images/family.jpg
    */
 
-  const filename =
-    value
-      .split("/")
-      .pop()
-      .trim();
+  value = value.replace(
+    /^\/?tabsway-tv\/?/,
+    ""
+  );
 
+
+  /* Remove leading slash */
+
+  value =
+    value.replace(/^\/+/, "");
+
+
+  /*
+   * Make sure BASE_URL
+   * ends with /
+   */
 
   const base =
     BASE_URL.endsWith("/")
@@ -57,7 +68,7 @@ function getImageUrl(image) {
       : `${BASE_URL}/`;
 
 
-  return `${base}images/${filename}`;
+  return `${base}${value}`;
 }
 
 
@@ -70,13 +81,15 @@ export default function PromotionCard({
 }) {
 
   const imageUrl =
-    getImageUrl(
+    getAssetUrl(
       promotion.image
     );
 
 
   const logoUrl =
-    `${BASE_URL}images/logo_2.png`;
+    getAssetUrl(
+      "images/logo_2.png"
+    );
 
 
   return (
@@ -85,7 +98,7 @@ export default function PromotionCard({
 
 
       {/* =================================================
-          FOOD BACKGROUND
+          REAL BACKGROUND IMAGE
       ================================================= */}
 
       {imageUrl && (
@@ -102,7 +115,7 @@ export default function PromotionCard({
 
 
       {/* =================================================
-          OVERLAYS
+          IMAGE OVERLAYS
       ================================================= */}
 
       <div className="photo-overlay" />
@@ -111,31 +124,40 @@ export default function PromotionCard({
 
 
       {/* =================================================
+          DECORATIVE LIGHTS
+      ================================================= */}
+
+      <div className="yellow-glow" />
+
+      <div className="red-glow" />
+
+
+      {/* =================================================
           HEADER
       ================================================= */}
 
       <header className="tv-header">
 
-        <img
-          src={logoUrl}
-          alt="TabsWay Kitchen"
-          className="header-logo"
-          draggable="false"
 
-          onError={(event) => {
+        {/* =================================================
+            LOGO
+        ================================================= */}
 
-            console.error(
-              "Logo failed to load:",
-              logoUrl
-            );
+        <div className="logo-container">
 
-            event.currentTarget.style.display =
-              "none";
+          <img
+            src={logoUrl}
+            alt="TabsWay Kitchen"
+            className="header-logo"
+            draggable="false"
+          />
 
-          }}
+        </div>
 
-        />
 
+        {/* =================================================
+            SPECIAL OFFER
+        ================================================= */}
 
         <div className="header-promo">
 
@@ -152,23 +174,37 @@ export default function PromotionCard({
 
 
       {/* =================================================
-          CONTENT
+          MAIN CONTENT
       ================================================= */}
 
       <section className="promotion-content">
 
 
+        {/* =================================================
+            BADGE
+        ================================================= */}
+
         {promotion.badge && (
 
           <div className="promo-badge">
+
             {promotion.badge}
+
           </div>
 
         )}
 
 
+        {/* =================================================
+            ACCENT
+        ================================================= */}
+
         <div className="accent" />
 
+
+        {/* =================================================
+            TITLE
+        ================================================= */}
 
         {promotion.title && (
 
@@ -179,6 +215,10 @@ export default function PromotionCard({
         )}
 
 
+        {/* =================================================
+            SUBTITLE
+        ================================================= */}
+
         {promotion.subtitle && (
 
           <h2>
@@ -188,20 +228,32 @@ export default function PromotionCard({
         )}
 
 
+        {/* =================================================
+            DESCRIPTION
+        ================================================= */}
+
         {promotion.description && (
 
           <p className="description">
+
             {promotion.description}
+
           </p>
 
         )}
 
+
+        {/* =================================================
+            OFFER
+        ================================================= */}
 
         {(promotion.price ||
           promotion.buttonText) && (
 
           <div className="offer">
 
+
+            {/* PRICE */}
 
             {promotion.price && (
 
@@ -220,6 +272,8 @@ export default function PromotionCard({
 
             )}
 
+
+            {/* CTA */}
 
             {promotion.buttonText && (
 
@@ -263,9 +317,12 @@ export default function PromotionCard({
       </footer>
 
 
+      {/* =================================================
+          SHINE
+      ================================================= */}
+
       <div className="shine" />
 
     </main>
-
   );
 }

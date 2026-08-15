@@ -6,13 +6,22 @@
   --cream: #fff8e5;
   --white: #ffffff;
   --dark: #21110b;
+
+  --shadow-soft:
+    0 12px 35px rgba(70, 25, 5, 0.18);
+
+  --shadow-red:
+    0 14px 35px rgba(227, 27, 35, 0.30);
 }
+
 
 /* =====================================================
    RESET
 ===================================================== */
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -23,22 +32,57 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+}
+
+html {
+  background: var(--cream);
 }
 
 body {
+  min-width: 320px;
+
   font-family:
     Inter,
     "Segoe UI",
     Arial,
     sans-serif;
 
-  background: var(--cream);
+  background:
+    var(--cream);
+
+  color:
+    var(--dark);
+
+  overflow: hidden;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 
 /* =====================================================
-   MAIN SCREEN
+   APP
+===================================================== */
+
+#root,
+.app {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+}
+
+.app {
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    var(--cream);
+}
+
+
+/* =====================================================
+   PROMOTION SCREEN
 ===================================================== */
 
 .promotion {
@@ -46,14 +90,23 @@ body {
 
   width: 100vw;
   height: 100vh;
+  min-height: 100vh;
 
   overflow: hidden;
 
-  background-color: #fff3d0;
+  isolation: isolate;
 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color:
+    #fff3d0;
+
+  background-size:
+    cover;
+
+  background-position:
+    center center;
+
+  background-repeat:
+    no-repeat;
 
   animation:
     backgroundZoom
@@ -63,8 +116,20 @@ body {
 }
 
 
+/*
+   Additional right-side photo protection.
+
+   The promotion image remains visible on the
+   right side while the text remains readable.
+*/
+
+.promotion::marker {
+  display: none;
+}
+
+
 /* =====================================================
-   COLORFUL FOOD OVERLAY
+   PHOTO OVERLAY
 ===================================================== */
 
 .photo-overlay {
@@ -74,25 +139,29 @@ body {
 
   z-index: 1;
 
+  pointer-events: none;
+
   background:
     linear-gradient(
       90deg,
 
-      rgba(255, 248, 225, .94) 0%,
+      rgba(255, 248, 225, 0.97) 0%,
 
-      rgba(255, 248, 225, .84) 24%,
+      rgba(255, 248, 225, 0.93) 20%,
 
-      rgba(255, 248, 225, .48) 47%,
+      rgba(255, 248, 225, 0.78) 37%,
 
-      rgba(255, 255, 255, .05) 72%,
+      rgba(255, 248, 225, 0.48) 52%,
 
-      rgba(255, 255, 255, .02) 100%
+      rgba(255, 255, 255, 0.12) 69%,
+
+      rgba(255, 255, 255, 0.00) 100%
     );
 }
 
 
 /* =====================================================
-   BOTTOM COLOR
+   BOTTOM PHOTO OVERLAY
 ===================================================== */
 
 .photo-bottom {
@@ -102,17 +171,23 @@ body {
 
   z-index: 2;
 
+  pointer-events: none;
+
   background:
     linear-gradient(
       0deg,
-      rgba(40, 10, 5, .62) 0%,
-      transparent 35%
+
+      rgba(42, 12, 5, 0.60) 0%,
+
+      rgba(42, 12, 5, 0.20) 14%,
+
+      transparent 38%
     );
 }
 
 
 /* =====================================================
-   COLORFUL LIGHT EFFECTS
+   TOP PHOTO COLOR PROTECTION
 ===================================================== */
 
 .promotion::before {
@@ -120,24 +195,28 @@ body {
 
   position: absolute;
 
-  width: 600px;
-  height: 600px;
+  width: 620px;
+  height: 620px;
 
-  top: -300px;
+  top: -330px;
   left: -250px;
+
+  z-index: 3;
+
+  pointer-events: none;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      rgba(255, 210, 28, .65),
-      rgba(255, 210, 28, 0)
+      rgba(255, 210, 28, 0.48) 0%,
+      rgba(255, 210, 28, 0.20) 35%,
+      rgba(255, 210, 28, 0) 72%
     );
 
-  z-index: 3;
-
-  filter: blur(20px);
+  filter:
+    blur(20px);
 
   animation:
     yellowGlow
@@ -145,34 +224,40 @@ body {
     ease-in-out
     infinite
     alternate;
-
-  pointer-events: none;
 }
 
+
+/* =====================================================
+   RED LIGHT
+===================================================== */
 
 .promotion::after {
   content: "";
 
   position: absolute;
 
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
 
-  right: -220px;
-  bottom: -220px;
+  right: -260px;
+  bottom: -280px;
+
+  z-index: 3;
+
+  pointer-events: none;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      rgba(227, 27, 35, .55),
-      rgba(227, 27, 35, 0)
+      rgba(227, 27, 35, 0.48) 0%,
+      rgba(227, 27, 35, 0.16) 42%,
+      rgba(227, 27, 35, 0) 72%
     );
 
-  z-index: 3;
-
-  filter: blur(30px);
+  filter:
+    blur(35px);
 
   animation:
     redGlow
@@ -180,35 +265,24 @@ body {
     ease-in-out
     infinite
     alternate;
-
-  pointer-events: none;
 }
 
 
 /* =====================================================
    HEADER
-   IMPORTANT:
-   The header now has its own dedicated space.
-   Promotion content starts below this area.
 ===================================================== */
 
 .tv-header {
   position: absolute;
 
-  z-index: 30;
+  z-index: 50;
 
-  top: 3.5vh;
+  top: 3vh;
 
   left: 5vw;
   right: 5vw;
 
-  /*
-    Reserve a dedicated header zone.
-    This prevents the logo from overlapping
-    the promotion content.
-  */
-
-  min-height: 10vh;
+  min-height: 90px;
 
   display: flex;
 
@@ -216,7 +290,7 @@ body {
 
   justify-content: space-between;
 
-  gap: 30px;
+  gap: 35px;
 
   pointer-events: none;
 }
@@ -227,96 +301,72 @@ body {
 ===================================================== */
 
 .header-logo {
+  display: block;
+
   width:
     clamp(
       160px,
       13vw,
-      280px
+      275px
     );
 
-  max-height: 85px;
+  height:
+    auto;
 
-  object-fit: contain;
+  max-height:
+    90px;
 
-  background: transparent;
+  object-fit:
+    contain;
 
-  border: none;
+  object-position:
+    left center;
 
-  padding: 0;
+  flex:
+    0 0 auto;
 
-  flex-shrink: 0;
+  background:
+    transparent !important;
+
+  border:
+    none !important;
+
+  outline:
+    none !important;
+
+  padding:
+    0 !important;
+
+  margin:
+    0;
+
+  /*
+     This removes the visual tile around
+     the logo and keeps it floating.
+  */
 
   filter:
     drop-shadow(
       0 7px 14px
-      rgba(80, 30, 0, .25)
+      rgba(80, 30, 0, 0.24)
     );
 
   animation:
     logoEntrance
-    .9s
+    0.9s
     cubic-bezier(.16, 1, .3, 1)
     both;
 }
 
 
 /* =====================================================
-   HEADER OFFER PILL
-===================================================== */
-
-.header-promo {
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
-
-  padding:
-    12px
-    20px;
-
-  border-radius: 50px;
-
-  background:
-    var(--red);
-
-  color: white;
-
-  font-size:
-    clamp(
-      11px,
-      1vw,
-      14px
-    );
-
-  font-weight: 900;
-
-  letter-spacing: 2px;
-
-  white-space: nowrap;
-
-  box-shadow:
-    0 10px 35px
-    rgba(227, 27, 35, .3);
-
-  animation:
-    pillEntrance
-    .8s
-    .25s
-    both;
-
-  pointer-events: none;
-}
-
-
-/* =====================================================
-   HEADER PROMOTION
+   SPECIAL OFFER
 ===================================================== */
 
 .header-promo {
   position: relative;
 
-  z-index: 50;
+  z-index: 60;
 
   display: inline-flex;
 
@@ -324,76 +374,114 @@ body {
 
   justify-content: center;
 
-  gap: 11px;
+  flex:
+    0 0 auto;
 
-  min-height: 46px;
+  min-height:
+    48px;
+
+  max-width:
+    min(300px, 30vw);
 
   padding:
-    11px
+    12px
     20px;
 
-  border-radius: 999px;
+  margin:
+    0;
+
+  border-radius:
+    999px;
 
   background:
     linear-gradient(
       135deg,
-      #e31b23,
-      #b90f16
+      var(--red) 0%,
+      var(--red-dark) 100%
     );
 
-  color: #ffffff;
+  color:
+    var(--white);
 
   border:
     2px solid
-    rgba(255, 210, 28, .9);
-
-  font-size: 13px;
-
-  font-weight: 950;
-
-  letter-spacing: 1.8px;
-
-  text-transform: uppercase;
-
-  white-space: nowrap;
+    rgba(255, 210, 28, 0.95);
 
   box-shadow:
-    0 10px 30px
-    rgba(227, 27, 35, .35),
+    0 12px 30px
+    rgba(227, 27, 35, 0.32),
 
     0 0 0 4px
-    rgba(255, 255, 255, .22);
+    rgba(255, 255, 255, 0.20);
+
+  font-size:
+    clamp(
+      10px,
+      0.85vw,
+      14px
+    );
+
+  font-weight:
+    950;
+
+  line-height:
+    1;
+
+  letter-spacing:
+    1.6px;
+
+  text-align:
+    center;
+
+  text-transform:
+    uppercase;
+
+  white-space:
+    nowrap;
+
+  overflow:
+    hidden;
 
   animation:
     pillEntrance
-    .8s
-    .25s
+    0.8s
+    0.25s
     both;
 }
 
 
-/* Yellow status dot */
+/* =====================================================
+   SPECIAL OFFER DOT
+===================================================== */
 
 .header-promo-dot {
-  display: block;
+  display:
+    block;
 
-  flex: 0 0 auto;
+  width:
+    10px;
 
-  width: 10px;
+  height:
+    10px;
 
-  height: 10px;
+  min-width:
+    10px;
 
-  border-radius: 50%;
+  margin-right:
+    2px;
+
+  border-radius:
+    50%;
 
   background:
-    #ffd21c;
+    var(--yellow);
 
   box-shadow:
     0 0 0 3px
-    rgba(255, 210, 28, .2),
+    rgba(255, 210, 28, 0.18),
 
-    0 0 16px
-    rgba(255, 210, 28, .9);
+    0 0 18px
+    rgba(255, 210, 28, 0.90);
 
   animation:
     pulse
@@ -403,89 +491,60 @@ body {
 }
 
 
-/* Text */
+/* =====================================================
+   SPECIAL OFFER LABEL
+===================================================== */
 
 .header-promo-label {
-  display: block;
+  display:
+    block;
 
-  color: #ffffff;
+  color:
+    var(--white);
 
-  line-height: 1;
+  font-size:
+    inherit;
 
-  white-space: nowrap;
-}
+  font-weight:
+    inherit;
 
+  line-height:
+    1;
 
-.header-promo span {
-  width: 9px;
-  height: 9px;
-
-  min-width: 9px;
-
-  border-radius: 50%;
-
-  background: var(--yellow);
-
-  box-shadow:
-    0 0 15px
-    var(--yellow);
-
-  animation:
-    pulse
-    1.4s
-    infinite;
+  white-space:
+    nowrap;
 }
 
 
 /* =====================================================
    MAIN CONTENT
-   ===================================================== */
+===================================================== */
 
 .promotion-content {
   position: absolute;
 
-  z-index: 15;
+  z-index: 20;
 
-  /*
-    START BELOW THE HEADER.
+  left:
+    6vw;
 
-    This is the main fix for the logo
-    covering buttons and information.
-  */
-
-  left: 6vw;
-
-  top: 19vh;
-
-  /*
-    Give the content enough room,
-    but keep it away from the right-side
-    food image.
-  */
+  top:
+    19vh;
 
   width:
-    min(
-      52vw,
-      900px
-    );
+    min(52vw, 900px);
 
-  max-width: 900px;
+  max-width:
+    900px;
 
-  /*
-    Keep content away from the footer.
-  */
+  max-height:
+    70vh;
 
-  max-height: 70vh;
+  overflow:
+    visible;
 
-  /*
-    Important:
-    Do NOT hide text if a promotion is
-    slightly longer.
-  */
-
-  overflow: visible;
-
-  isolation: isolate;
+  isolation:
+    isolate;
 
   animation:
     contentEntrance
@@ -500,62 +559,85 @@ body {
 ===================================================== */
 
 .promo-badge {
-  display: inline-flex;
+  display:
+    inline-flex;
 
-  align-items: center;
+  align-items:
+    center;
 
-  max-width: 100%;
+  justify-content:
+    center;
+
+  max-width:
+    100%;
+
+  min-height:
+    34px;
 
   padding:
     9px
     18px;
 
+  border-radius:
+    999px;
+
   background:
-    var(--yellow);
+    linear-gradient(
+      135deg,
+      var(--yellow),
+      var(--yellow-light)
+    );
 
   color:
     var(--dark);
 
-  border-radius:
-    50px;
-
   font-size:
     clamp(
-      11px,
-      1vw,
+      10px,
+      0.9vw,
       15px
     );
 
-  font-weight: 950;
+  font-weight:
+    950;
 
-  letter-spacing: 1.5px;
+  line-height:
+    1.15;
 
-  line-height: 1.2;
+  letter-spacing:
+    1.5px;
 
-  text-transform: uppercase;
+  text-align:
+    center;
 
-  white-space: normal;
+  text-transform:
+    uppercase;
 
-  overflow-wrap: anywhere;
+  white-space:
+    normal;
+
+  overflow-wrap:
+    anywhere;
 
   box-shadow:
     0 8px 25px
-    rgba(255, 210, 28, .35);
+    rgba(255, 210, 28, 0.32);
 
   animation:
     badgeEntrance
-    .8s
-    .1s
+    0.8s
+    0.1s
     both;
 }
 
 
 /* =====================================================
-   DECORATIVE ACCENT
+   ACCENT
 ===================================================== */
 
 .accent {
-  position: relative;
+  position:
+    relative;
 
   width:
     clamp(
@@ -564,36 +646,52 @@ body {
       90px
     );
 
-  height: 6px;
+  height:
+    6px;
 
-  margin-top: 18px;
+  margin-top:
+    18px;
 
-  border-radius: 10px;
+  border-radius:
+    999px;
 
   background:
     var(--red);
 
   box-shadow:
     0 5px 18px
-    rgba(227, 27, 35, .25);
+    rgba(227, 27, 35, 0.25);
 
-  overflow: hidden;
+  overflow:
+    hidden;
 }
 
 
 .accent::after {
-  content: "";
+  content:
+    "";
 
-  position: absolute;
+  position:
+    absolute;
 
-  top: 0;
-  left: -100%;
+  top:
+    0;
 
-  width: 100%;
-  height: 100%;
+  left:
+    -100%;
+
+  width:
+    100%;
+
+  height:
+    100%;
 
   background:
-    var(--yellow);
+    linear-gradient(
+      90deg,
+      var(--yellow),
+      #fff4a0
+    );
 
   animation:
     accentMove
@@ -616,22 +714,15 @@ body {
   max-width:
     900px;
 
-  /*
-    Reduced from 125px.
-
-    This keeps long promotion titles
-    visible on a 1920x1080 TV.
-  */
-
   font-size:
     clamp(
       45px,
       5.7vw,
-      100px
+      105px
     );
 
   line-height:
-    .92;
+    0.92;
 
   letter-spacing:
     -3px;
@@ -648,20 +739,17 @@ body {
   overflow-wrap:
     anywhere;
 
-  word-break:
-    normal;
-
   text-shadow:
     0 5px 0
-    rgba(255,255,255,.7),
+    rgba(255, 255, 255, 0.72),
 
     0 12px 25px
-    rgba(100, 30, 0, .18);
+    rgba(100, 30, 0, 0.18);
 
   animation:
     titleEntrance
-    .8s
-    .1s
+    0.8s
+    0.1s
     both;
 }
 
@@ -696,10 +784,14 @@ body {
   overflow-wrap:
     anywhere;
 
+  text-shadow:
+    0 2px 8px
+    rgba(255, 255, 255, 0.35);
+
   animation:
     subtitleEntrance
-    .9s
-    .35s
+    0.9s
+    0.35s
     both;
 }
 
@@ -708,7 +800,8 @@ body {
    DESCRIPTION
 ===================================================== */
 
-.promotion-content p {
+.promotion-content p,
+.description {
   max-width:
     720px;
 
@@ -731,11 +824,7 @@ body {
     600;
 
   color:
-    rgba(45, 20, 10, .82);
-
-  /*
-    Never cut long descriptions.
-  */
+    rgba(45, 20, 10, 0.86);
 
   white-space:
     normal;
@@ -743,26 +832,28 @@ body {
   overflow-wrap:
     anywhere;
 
+  text-shadow:
+    0 1px 3px
+    rgba(255, 255, 255, 0.30);
+
   animation:
     descriptionEntrance
-    .9s
-    .5s
+    0.9s
+    0.5s
     both;
 }
 
 
 /* =====================================================
    OFFER ROW
-   IMPORTANT:
-   flex-wrap prevents the button from
-   being pushed underneath the logo
-   or outside the screen.
 ===================================================== */
 
 .offer {
-  position: relative;
+  position:
+    relative;
 
-  z-index: 25;
+  z-index:
+    35;
 
   display:
     flex;
@@ -770,22 +861,31 @@ body {
   align-items:
     center;
 
+  justify-content:
+    flex-start;
+
   flex-wrap:
     wrap;
 
   gap:
-    15px;
+    18px;
 
-  margin-top:
-    22px;
+  width:
+    100%;
 
   max-width:
     850px;
 
+  margin-top:
+    22px;
+
+  padding-bottom:
+    5px;
+
   animation:
     offerEntrance
-    .9s
-    .65s
+    0.9s
+    0.65s
     both;
 }
 
@@ -801,22 +901,31 @@ body {
   flex-direction:
     column;
 
-  flex-shrink:
-    0;
+  align-items:
+    flex-start;
+
+  justify-content:
+    center;
+
+  flex:
+    0 0 auto;
 
   color:
     var(--red);
 
   line-height:
-    .9;
+    0.9;
 
   text-shadow:
     0 5px 20px
-    rgba(80, 20, 0, .15);
+    rgba(80, 20, 0, 0.15);
 }
 
 
 .price small {
+  display:
+    block;
+
   margin-bottom:
     5px;
 
@@ -829,12 +938,21 @@ body {
   font-weight:
     900;
 
+  line-height:
+    1;
+
   letter-spacing:
     2px;
 }
 
 
 .price strong {
+  display:
+    block;
+
+  color:
+    var(--red);
+
   font-size:
     clamp(
       38px,
@@ -844,35 +962,17 @@ body {
 
   font-weight:
     950;
+
+  line-height:
+    0.9;
 
   white-space:
     nowrap;
 }
 
 
-/*
-   Compatibility:
-   If your JSX uses .price without <strong>,
-   this still keeps the original font sizing.
-*/
-
-.price {
-  font-size:
-    clamp(
-      38px,
-      4vw,
-      70px
-    );
-
-  font-weight:
-    950;
-}
-
-
 /* =====================================================
    CTA
-   IMPORTANT:
-   High z-index + wrapping keeps the button visible.
 ===================================================== */
 
 .cta {
@@ -880,7 +980,7 @@ body {
     relative;
 
   z-index:
-    26;
+    40;
 
   display:
     inline-flex;
@@ -894,41 +994,45 @@ body {
   gap:
     10px;
 
+  min-width:
+    180px;
+
   min-height:
     52px;
 
   max-width:
-    320px;
+    330px;
 
   padding:
     14px
     22px;
 
+  border:
+    2px solid
+    rgba(255, 210, 28, 0.85);
+
   border-radius:
-    9px;
+    12px;
 
   background:
     linear-gradient(
       135deg,
-      var(--red),
-      var(--red-dark)
+      var(--red) 0%,
+      var(--red-dark) 100%
     );
 
   color:
-    white;
+    var(--white);
 
   font-size:
     clamp(
       13px,
-      1.1vw,
+      1.05vw,
       18px
     );
 
   font-weight:
     950;
-
-  text-transform:
-    uppercase;
 
   line-height:
     1.15;
@@ -936,12 +1040,14 @@ body {
   text-align:
     center;
 
+  text-transform:
+    uppercase;
+
   overflow-wrap:
     anywhere;
 
   box-shadow:
-    0 10px 25px
-    rgba(227, 27, 35, .35);
+    var(--shadow-red);
 
   animation:
     ctaFloat
@@ -950,7 +1056,13 @@ body {
     infinite;
 
   transition:
-    transform .3s ease;
+    transform
+    0.3s
+    ease,
+
+    box-shadow
+    0.3s
+    ease;
 }
 
 
@@ -958,11 +1070,15 @@ body {
   transform:
     translateY(-5px)
     scale(1.03);
+
+  box-shadow:
+    0 18px 40px
+    rgba(227, 27, 35, 0.42);
 }
 
 
 /* =====================================================
-   COLOR STRIPE / FOOTER
+   FOOTER
 ===================================================== */
 
 .tv-footer {
@@ -970,7 +1086,7 @@ body {
     absolute;
 
   z-index:
-    30;
+    35;
 
   bottom:
     3vh;
@@ -994,7 +1110,7 @@ body {
     18px;
 
   color:
-    white;
+    var(--white);
 
   font-size:
     10px;
@@ -1010,12 +1126,16 @@ body {
 
   text-shadow:
     0 2px 5px
-    rgba(0,0,0,.5);
+    rgba(0, 0, 0, 0.55);
 
   pointer-events:
     none;
 }
 
+
+/* =====================================================
+   FOOTER LINES
+===================================================== */
 
 .footer-line {
   width:
@@ -1024,11 +1144,14 @@ body {
   height:
     4px;
 
-  flex-shrink:
-    1;
+  flex:
+    1 1 180px;
+
+  max-width:
+    180px;
 
   border-radius:
-    10px;
+    999px;
 
   background:
     linear-gradient(
@@ -1054,11 +1177,11 @@ body {
   position:
     absolute;
 
-  z-index:
-    40;
-
   inset:
     0;
+
+  z-index:
+    45;
 
   pointer-events:
     none;
@@ -1067,7 +1190,7 @@ body {
     linear-gradient(
       115deg,
       transparent 40%,
-      rgba(255,255,255,.25) 50%,
+      rgba(255, 255, 255, 0.24) 50%,
       transparent 60%
     );
 
@@ -1080,6 +1203,373 @@ body {
     3s
     ease-in-out
     infinite;
+}
+
+
+/* =====================================================
+   PROGRESS DOTS
+===================================================== */
+
+.progress {
+  position:
+    fixed;
+
+  z-index:
+    100;
+
+  left:
+    50%;
+
+  bottom:
+    28px;
+
+  transform:
+    translateX(-50%);
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  gap:
+    9px;
+
+  padding:
+    8px
+    12px;
+
+  border-radius:
+    999px;
+
+  background:
+    rgba(33, 17, 11, 0.35);
+
+  backdrop-filter:
+    blur(10px);
+
+  -webkit-backdrop-filter:
+    blur(10px);
+}
+
+
+.progress-dot {
+  width:
+    8px;
+
+  height:
+    8px;
+
+  padding:
+    0;
+
+  border:
+    0;
+
+  border-radius:
+    50%;
+
+  background:
+    rgba(255, 255, 255, 0.55);
+
+  cursor:
+    pointer;
+
+  transition:
+    all
+    0.3s
+    ease;
+}
+
+
+.progress-dot.active {
+  width:
+    26px;
+
+  border-radius:
+    999px;
+
+  background:
+    var(--yellow);
+
+  box-shadow:
+    0 0 12px
+    rgba(255, 210, 28, 0.85);
+}
+
+
+/* =====================================================
+   CONNECTION STATUS
+===================================================== */
+
+.connection-status {
+  position:
+    fixed;
+
+  z-index:
+    100;
+
+  top:
+    22px;
+
+  right:
+    22px;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  gap:
+    7px;
+
+  padding:
+    7px
+    11px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.30);
+
+  border-radius:
+    999px;
+
+  background:
+    rgba(33, 17, 11, 0.42);
+
+  color:
+    white;
+
+  font-size:
+    9px;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    1.5px;
+
+  backdrop-filter:
+    blur(10px);
+
+  -webkit-backdrop-filter:
+    blur(10px);
+}
+
+
+.status-dot {
+  width:
+    7px;
+
+  height:
+    7px;
+
+  border-radius:
+    50%;
+
+  background:
+    #45e65b;
+
+  box-shadow:
+    0 0 10px
+    rgba(69, 230, 91, 0.9);
+
+  animation:
+    pulse
+    1.5s
+    ease-in-out
+    infinite;
+}
+
+
+/* =====================================================
+   UPDATED STATUS
+===================================================== */
+
+.updated-status {
+  position:
+    fixed;
+
+  z-index:
+    100;
+
+  right:
+    22px;
+
+  bottom:
+    20px;
+
+  color:
+    rgba(255, 255, 255, 0.78);
+
+  font-size:
+    9px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.8px;
+
+  text-shadow:
+    0 2px 4px
+    rgba(0, 0, 0, 0.6);
+}
+
+
+/* =====================================================
+   LOADING / ERROR / IDLE
+===================================================== */
+
+.error-screen,
+.idle-screen {
+  width:
+    100vw;
+
+  height:
+    100vh;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  gap:
+    20px;
+
+  padding:
+    30px;
+
+  text-align:
+    center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff8e5,
+      #ffffff
+    );
+
+  color:
+    var(--dark);
+}
+
+
+.error-logo,
+.idle-logo-image {
+  width:
+    min(
+      260px,
+      50vw
+    );
+
+  max-height:
+    120px;
+
+  object-fit:
+    contain;
+
+  background:
+    transparent !important;
+
+  border:
+    none !important;
+
+  filter:
+    drop-shadow(
+      0 8px 20px
+      rgba(80, 30, 0, 0.16)
+    );
+}
+
+
+.error-screen h1 {
+  margin:
+    0;
+
+  color:
+    var(--red);
+
+  font-size:
+    clamp(
+      28px,
+      4vw,
+      55px
+    );
+}
+
+
+.error-screen p,
+.idle-message {
+  max-width:
+    600px;
+
+  margin:
+    0;
+
+  font-size:
+    18px;
+
+  line-height:
+    1.5;
+
+  font-weight:
+    600;
+}
+
+
+.error-screen button {
+  border:
+    none;
+
+  padding:
+    14px
+    25px;
+
+  border-radius:
+    10px;
+
+  background:
+    var(--red);
+
+  color:
+    white;
+
+  font-weight:
+    900;
+
+  cursor:
+    pointer;
+
+  box-shadow:
+    var(--shadow-red);
+}
+
+
+.idle-message {
+  color:
+    var(--red);
+
+  font-size:
+    clamp(
+      20px,
+      3vw,
+      36px
+    );
+
+  font-weight:
+    900;
 }
 
 
@@ -1110,7 +1600,7 @@ body {
 
     transform:
       translateY(-25px)
-      scale(.9);
+      scale(0.90);
   }
 
   to {
@@ -1132,7 +1622,8 @@ body {
       0;
 
     transform:
-      translateX(30px);
+      translateX(35px)
+      scale(0.94);
   }
 
   to {
@@ -1140,7 +1631,8 @@ body {
       1;
 
     transform:
-      translateX(0);
+      translateX(0)
+      scale(1);
   }
 
 }
@@ -1175,7 +1667,7 @@ body {
 
     transform:
       translateY(-20px)
-      scale(.9);
+      scale(0.90);
   }
 
   to {
@@ -1198,7 +1690,7 @@ body {
 
     transform:
       translateY(40px)
-      scale(.96);
+      scale(0.96);
   }
 
   to {
@@ -1286,7 +1778,7 @@ body {
 
   50% {
     transform:
-      translateY(-5px);
+      translateY(-4px);
   }
 
 }
@@ -1308,7 +1800,7 @@ body {
       scale(1.35);
 
     opacity:
-      .65;
+      0.65;
   }
 
 }
@@ -1368,7 +1860,7 @@ body {
 
   from {
     opacity:
-      .55;
+      0.55;
   }
 
   to {
@@ -1377,7 +1869,7 @@ body {
 
     box-shadow:
       0 0 15px
-      rgba(255,210,28,.5);
+      rgba(255, 210, 28, 0.50);
   }
 
 }
@@ -1400,10 +1892,7 @@ body {
 
 
 /* =====================================================
-   LARGE 1920x1080 TV
-   IMPORTANT:
-   Do NOT push content down to 26vh.
-   That was causing layout problems.
+   LARGE TV — 1920 x 1080
 ===================================================== */
 
 @media (min-width: 1800px) {
@@ -1417,9 +1906,6 @@ body {
 
     right:
       5vw;
-
-    min-height:
-      10vh;
   }
 
 
@@ -1428,7 +1914,20 @@ body {
       260px;
 
     max-height:
-      85px;
+      90px;
+  }
+
+
+  .header-promo {
+    min-height:
+      52px;
+
+    padding:
+      13px
+      23px;
+
+    font-size:
+      14px;
   }
 
 
@@ -1436,24 +1935,14 @@ body {
     left:
       6vw;
 
-    /*
-      Content starts below logo/header.
-    */
-
     top:
       18vh;
 
     width:
-      min(
-        52vw,
-        950px
-      );
+      min(52vw, 950px);
 
     max-width:
       950px;
-
-    max-height:
-      70vh;
   }
 
 
@@ -1490,13 +1979,22 @@ body {
   }
 
 
+  .offer {
+    gap:
+      22px;
+
+    margin-top:
+      25px;
+  }
+
+
   .cta {
     min-height:
-      55px;
+      56px;
 
     padding:
       15px
-      24px;
+      26px;
   }
 
 }
@@ -1517,9 +2015,6 @@ body {
 
     right:
       5vw;
-
-    min-height:
-      10vh;
   }
 
 
@@ -1529,6 +2024,22 @@ body {
 
     max-height:
       75px;
+  }
+
+
+  .header-promo {
+    min-height:
+      44px;
+
+    max-width:
+      260px;
+
+    padding:
+      10px
+      15px;
+
+    font-size:
+      11px;
   }
 
 
@@ -1544,9 +2055,6 @@ body {
 
     max-width:
       700px;
-
-    max-height:
-      70vh;
   }
 
 
@@ -1582,21 +2090,11 @@ body {
       );
   }
 
-
-  .header-promo {
-    font-size:
-      11px;
-
-    padding:
-      9px
-      15px;
-  }
-
 }
 
 
 /* =====================================================
-   PORTRAIT / NARROW DISPLAY
+   MOBILE / PORTRAIT
 ===================================================== */
 
 @media (max-width: 700px) {
@@ -1612,7 +2110,7 @@ body {
       5vw;
 
     min-height:
-      10vh;
+      65px;
   }
 
 
@@ -1704,6 +2202,9 @@ body {
 
 
   .cta {
+    min-width:
+      150px;
+
     max-width:
       260px;
 
@@ -1721,11 +2222,26 @@ body {
       none;
   }
 
+
+  .connection-status {
+    top:
+      12px;
+
+    right:
+      12px;
+  }
+
+
+  .updated-status {
+    display:
+      none;
+  }
+
 }
 
 
 /* =====================================================
-   VERY SHORT TV SCREEN
+   SHORT TV
 ===================================================== */
 
 @media (max-height: 700px) {
@@ -1735,7 +2251,7 @@ body {
       2.5vh;
 
     min-height:
-      9vh;
+      65px;
   }
 
 
@@ -1806,11 +2322,17 @@ body {
       17px;
   }
 
+
+  .tv-footer {
+    bottom:
+      2vh;
+  }
+
 }
 
 
 /* =====================================================
-   VERY SHORT + LARGE TV
+   LARGE + SHORT TV
 ===================================================== */
 
 @media (min-width: 1200px) and (max-height: 700px) {
@@ -1862,7 +2384,7 @@ body {
 
 
 /* =====================================================
-   EXTRA SMALL SCREEN
+   EXTRA SMALL
 ===================================================== */
 
 @media (max-width: 450px) {
