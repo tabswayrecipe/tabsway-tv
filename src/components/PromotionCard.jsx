@@ -1,9 +1,9 @@
 import { ArrowRight } from "lucide-react";
 
-import downloadImage from "./assets/download.jpeg";
-import familyImage from "./assets/family.jpg";
-import lunchImage from "./assets/lunch.jpg";
-import logoImage from "./assets/logo_2.png";
+import downloadImage from "../assets/download.jpeg";
+import familyImage from "../assets/family.jpg";
+import lunchImage from "../assets/lunch.jpg";
+import logoImage from "../assets/logo_2.png";
 
 
 /* =====================================================
