@@ -11,19 +11,28 @@ import PromotionCard
 import Loading
   from "./components/Loading";
 
+import logoImage
+  from "./assets/logo_2.png";
+
+
+/* =====================================================
+   DATA URL
+===================================================== */
 
 const BASE_URL =
-  import.meta.env.BASE_URL;
-
+  import.meta.env.BASE_URL || "/";
 
 const DATA_URL =
   `${BASE_URL}data/promotions.json`;
 
 
+/* =====================================================
+   TIME HELPERS
+===================================================== */
+
 function getCurrentMinutes() {
 
-  const now =
-    new Date();
+  const now = new Date();
 
   return (
     now.getHours() * 60 +
@@ -32,22 +41,20 @@ function getCurrentMinutes() {
 }
 
 
-function timeToMinutes(
-  time
-) {
+function timeToMinutes(time) {
 
   if (!time) {
     return 0;
   }
 
   const parts =
-    time.split(":");
+    String(time).split(":");
 
   const hours =
-    Number(parts[0]);
+    Number(parts[0]) || 0;
 
   const minutes =
-    Number(parts[1]);
+    Number(parts[1]) || 0;
 
   return (
     hours * 60 +
@@ -56,9 +63,20 @@ function timeToMinutes(
 }
 
 
-function isPromotionActive(
-  promotion
-) {
+/* =====================================================
+   PROMOTION SCHEDULE
+===================================================== */
+
+function isPromotionActive(promotion) {
+
+  if (!promotion) {
+    return false;
+  }
+
+
+  /*
+   * Explicitly disabled promotion
+   */
 
   if (
     promotion.enabled === false
@@ -67,13 +85,16 @@ function isPromotionActive(
   }
 
 
+  /*
+   * No schedule means
+   * promotion is always active.
+   */
+
   if (
     !promotion.schedule ||
     promotion.schedule.enabled !== true
   ) {
-
     return true;
-
   }
 
 
@@ -93,6 +114,13 @@ function isPromotionActive(
     );
 
 
+  /*
+   * Normal schedule
+   *
+   * Example:
+   * 11:00 → 15:00
+   */
+
   if (start <= end) {
 
     return (
@@ -104,11 +132,11 @@ function isPromotionActive(
 
 
   /*
-    Handles schedules crossing
-    midnight, for example:
-
-    22:00 → 02:00
-  */
+   * Overnight schedule
+   *
+   * Example:
+   * 22:00 → 02:00
+   */
 
   return (
     current >= start ||
@@ -117,8 +145,32 @@ function isPromotionActive(
 }
 
 
+/* =====================================================
+   SORT PROMOTIONS
+===================================================== */
+
+function sortPromotions(promotions) {
+
+  return promotions
+    .filter(isPromotionActive)
+    .sort(
+      (a, b) =>
+        Number(a.priority ?? 999) -
+        Number(b.priority ?? 999)
+    );
+}
+
+
+/* =====================================================
+   APP
+===================================================== */
+
 export default function App() {
 
+
+  /* ===================================================
+     PROMOTIONS
+  =================================================== */
 
   const [
     promotions,
@@ -126,15 +178,27 @@ export default function App() {
   ] = useState([]);
 
 
+  /* ===================================================
+     SETTINGS
+  =================================================== */
+
   const [
     settings,
     setSettings
   ] = useState({
+
     enabled: true,
+
     rotationSeconds: 8,
+
     refreshMinutes: 5
+
   });
 
+
+  /* ===================================================
+     CURRENT PROMOTION
+  =================================================== */
 
   const [
     currentIndex,
@@ -142,11 +206,19 @@ export default function App() {
   ] = useState(0);
 
 
+  /* ===================================================
+     LOADING
+  =================================================== */
+
   const [
     loading,
     setLoading
   ] = useState(true);
 
+
+  /* ===================================================
+     ERROR
+  =================================================== */
 
   const [
     error,
@@ -154,11 +226,19 @@ export default function App() {
   ] = useState(false);
 
 
+  /* ===================================================
+     LAST UPDATED
+  =================================================== */
+
   const [
     lastUpdated,
     setLastUpdated
   ] = useState(null);
 
+
+  /* ===================================================
+     LOAD PROMOTIONS
+  =================================================== */
 
   const loadPromotions =
     useCallback(
@@ -191,60 +271,87 @@ export default function App() {
             await response.json();
 
 
+          /*
+           * Your JSON structure is:
+           *
+           * {
+           *   restaurant: "...",
+           *   settings: {...},
+           *   promotions: [...]
+           * }
+           */
+
+
           const allPromotions =
             Array.isArray(
-              data.promotions
+              data?.promotions
             )
               ? data.promotions
               : [];
 
 
-          const activePromotions =
-            allPromotions
-              .filter(
-                isPromotionActive
-              )
-              .sort(
-                (a, b) =>
-                  Number(
-                    a.priority || 999
-                  ) -
-                  Number(
-                    b.priority || 999
-                  )
-              );
+          /*
+           * Filter and sort
+           */
 
+          const activePromotions =
+            sortPromotions(
+              allPromotions
+            );
+
+
+          /*
+           * Settings
+           */
+
+          const newSettings = {
+
+            enabled:
+              data?.settings?.enabled !== false,
+
+            rotationSeconds:
+              Number(
+                data?.settings?.rotationSeconds
+              ) || 8,
+
+            refreshMinutes:
+              Number(
+                data?.settings?.refreshMinutes
+              ) || 5
+
+          };
+
+
+          /*
+           * Save data
+           */
 
           setPromotions(
             activePromotions
           );
 
 
-          setSettings({
+          setSettings(
+            newSettings
+          );
 
-            enabled:
-              data.settings?.enabled !== false,
 
-            rotationSeconds:
-              Number(
-                data.settings
-                  ?.rotationSeconds
-              ) || 8,
-
-            refreshMinutes:
-              Number(
-                data.settings
-                  ?.refreshMinutes
-              ) || 5
-
-          });
-
+          /*
+           * Always start at
+           * first promotion
+           */
 
           setCurrentIndex(0);
+
+
+          /*
+           * Update timestamp
+           */
 
           setLastUpdated(
             new Date()
           );
+
 
           setLoading(false);
 
@@ -254,6 +361,7 @@ export default function App() {
             "Promotion loading error:",
             err
           );
+
 
           setError(true);
 
@@ -266,9 +374,9 @@ export default function App() {
     );
 
 
-  /*
-    Initial download
-  */
+  /* ===================================================
+     INITIAL LOAD
+  =================================================== */
 
   useEffect(() => {
 
@@ -279,23 +387,22 @@ export default function App() {
   ]);
 
 
-  /*
-    Refresh promotions
-    automatically.
-  */
+  /* ===================================================
+     AUTOMATIC JSON REFRESH
+  =================================================== */
 
   useEffect(() => {
 
     const minutes =
-      settings.refreshMinutes || 5;
+      Number(
+        settings.refreshMinutes
+      ) || 5;
 
 
     const interval =
       setInterval(
         loadPromotions,
-        minutes *
-        60 *
-        1000
+        minutes * 60 * 1000
       );
 
 
@@ -310,9 +417,9 @@ export default function App() {
   ]);
 
 
-  /*
-    Rotate promotions.
-  */
+  /* ===================================================
+     PROMOTION ROTATION
+  =================================================== */
 
   useEffect(() => {
 
@@ -331,7 +438,9 @@ export default function App() {
       Number(
         promotion?.displaySeconds
       ) ||
-      settings.rotationSeconds ||
+      Number(
+        settings.rotationSeconds
+      ) ||
       8;
 
 
@@ -342,10 +451,13 @@ export default function App() {
           setCurrentIndex(
             previous => {
 
+              const next =
+                previous + 1;
+
               return (
-                previous + 1
-              ) %
-              promotions.length;
+                next %
+                promotions.length
+              );
 
             }
           );
@@ -367,15 +479,9 @@ export default function App() {
   ]);
 
 
-  /*
-    Re-check schedules
-    every minute.
-
-    This allows a lunch
-    promotion to disappear
-    automatically when its
-    scheduled time ends.
-  */
+  /* ===================================================
+     RECHECK SCHEDULES
+  =================================================== */
 
   useEffect(() => {
 
@@ -396,12 +502,9 @@ export default function App() {
   ]);
 
 
-  /*
-    Fullscreen attempt.
-
-    Useful when running inside
-    a browser or WebView.
-  */
+  /* ===================================================
+     FULLSCREEN
+  =================================================== */
 
   useEffect(() => {
 
@@ -431,9 +534,9 @@ export default function App() {
         } catch {
 
           /*
-            Android TV WebView may
-            already be fullscreen.
-          */
+           * Android TV WebView may
+           * already be fullscreen.
+           */
 
         }
 
@@ -469,22 +572,37 @@ export default function App() {
   }, []);
 
 
-  /*
-    Memoized current promotion.
-  */
+  /* ===================================================
+     CURRENT PROMOTION
+  =================================================== */
 
   const currentPromotion =
     useMemo(
-      () =>
-        promotions[
-          currentIndex
-        ],
+      () => {
+
+        if (
+          promotions.length === 0
+        ) {
+          return null;
+        }
+
+
+        return (
+          promotions[currentIndex] ||
+          promotions[0]
+        );
+
+      },
       [
         promotions,
         currentIndex
       ]
     );
 
+
+  /* ===================================================
+     LOADING SCREEN
+  =================================================== */
 
   if (loading) {
 
@@ -495,6 +613,10 @@ export default function App() {
   }
 
 
+  /* ===================================================
+     ERROR SCREEN
+  =================================================== */
+
   if (error) {
 
     return (
@@ -503,8 +625,8 @@ export default function App() {
 
         <img
           className="error-logo"
-          src={`${BASE_URL}logo.png`}
-          alt="Tabsway Kitchen"
+          src={logoImage}
+          alt="TabsWay Kitchen"
         />
 
 
@@ -515,11 +637,12 @@ export default function App() {
 
         <p>
           Checking for the latest
-          Tabsway Kitchen promotions...
+          TabsWay Kitchen promotions...
         </p>
 
 
         <button
+          type="button"
           onClick={
             loadPromotions
           }
@@ -534,6 +657,10 @@ export default function App() {
   }
 
 
+  /* ===================================================
+     IDLE SCREEN
+  =================================================== */
+
   if (
     settings.enabled === false ||
     promotions.length === 0
@@ -545,8 +672,8 @@ export default function App() {
 
         <img
           className="idle-logo-image"
-          src={`${BASE_URL}logo.png`}
-          alt="Tabsway Kitchen"
+          src={logoImage}
+          alt="TabsWay Kitchen"
         />
 
 
@@ -564,10 +691,18 @@ export default function App() {
   }
 
 
+  /* ===================================================
+     MAIN SCREEN
+  =================================================== */
+
   return (
 
     <div className="app">
 
+
+      {/* =================================================
+          CURRENT PROMOTION
+      ================================================= */}
 
       {currentPromotion && (
 
@@ -583,52 +718,83 @@ export default function App() {
       )}
 
 
-      <div className="progress">
+      {/* =================================================
+          PROMOTION NAVIGATION
+      ================================================= */}
 
-        {promotions.map(
-          (promotion, index) => (
+      {promotions.length > 1 && (
 
-            <button
-              key={
-                promotion.id
-              }
-              className={
-                index === currentIndex
-                  ? "progress-dot active"
-                  : "progress-dot"
-              }
-              aria-label={
-                `Show promotion ${
-                  index + 1
-                }`
-              }
-              onClick={() =>
-                setCurrentIndex(
-                  index
-                )
-              }
-            />
+        <div className="progress">
 
-          )
-        )}
+          {promotions.map(
+            (promotion, index) => (
 
-      </div>
+              <button
+                key={
+                  promotion.id
+                }
 
+                type="button"
+
+                className={
+                  index === currentIndex
+                    ? "progress-dot active"
+                    : "progress-dot"
+                }
+
+                aria-label={
+                  `Show promotion ${
+                    index + 1
+                  }`
+                }
+
+                aria-current={
+                  index === currentIndex
+                    ? "true"
+                    : undefined
+                }
+
+                onClick={() =>
+                  setCurrentIndex(
+                    index
+                  )
+                }
+
+              />
+
+            )
+          )}
+
+        </div>
+
+      )}
+
+
+      {/* =================================================
+          LIVE STATUS
+      ================================================= */}
 
       <div className="connection-status">
 
-        <span className="status-dot"></span>
+        <span
+          className="status-dot"
+        />
 
         LIVE
 
       </div>
 
 
+      {/* =================================================
+          UPDATED STATUS
+      ================================================= */}
+
       {lastUpdated && (
 
         <div className="updated-status">
 
           Updated{" "}
+
           {lastUpdated.toLocaleTimeString(
             [],
             {
