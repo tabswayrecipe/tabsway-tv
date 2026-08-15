@@ -1,5 +1,7 @@
 import {
+  useCallback,
   useEffect,
+  useMemo,
   useState
 } from "react";
 
@@ -10,8 +12,12 @@ import Loading
   from "./components/Loading";
 
 
+const BASE_URL =
+  import.meta.env.BASE_URL;
+
+
 const DATA_URL =
-  "/tabsway-tv/data/promotions.json";
+  `${BASE_URL}data/promotions.json`;
 
 
 function getCurrentMinutes() {
@@ -26,14 +32,22 @@ function getCurrentMinutes() {
 }
 
 
-function timeToMinutes(time) {
+function timeToMinutes(
+  time
+) {
 
-  const [
-    hours,
-    minutes
-  ] = time
-    .split(":")
-    .map(Number);
+  if (!time) {
+    return 0;
+  }
+
+  const parts =
+    time.split(":");
+
+  const hours =
+    Number(parts[0]);
+
+  const minutes =
+    Number(parts[1]);
 
   return (
     hours * 60 +
@@ -46,67 +60,93 @@ function isPromotionActive(
   promotion
 ) {
 
-  if (!promotion.enabled) {
+  if (
+    promotion.enabled === false
+  ) {
     return false;
   }
 
+
   if (
     !promotion.schedule ||
-    !promotion.schedule.enabled
+    promotion.schedule.enabled !== true
   ) {
+
     return true;
+
   }
 
-  const now =
+
+  const current =
     getCurrentMinutes();
+
 
   const start =
     timeToMinutes(
       promotion.schedule.start
     );
 
+
   const end =
     timeToMinutes(
       promotion.schedule.end
     );
 
+
   if (start <= end) {
 
     return (
-      now >= start &&
-      now <= end
+      current >= start &&
+      current <= end
     );
 
   }
 
+
+  /*
+    Handles schedules crossing
+    midnight, for example:
+
+    22:00 → 02:00
+  */
+
   return (
-    now >= start ||
-    now <= end
+    current >= start ||
+    current <= end
   );
 }
 
 
 export default function App() {
 
+
   const [
     promotions,
     setPromotions
   ] = useState([]);
 
+
   const [
     settings,
     setSettings
-  ] = useState(null);
+  ] = useState({
+    enabled: true,
+    rotationSeconds: 8,
+    refreshMinutes: 5
+  });
+
 
   const [
     currentIndex,
     setCurrentIndex
   ] = useState(0);
 
+
   const [
     loading,
     setLoading
   ] = useState(true);
+
 
   const [
     error,
@@ -114,81 +154,165 @@ export default function App() {
   ] = useState(false);
 
 
-  async function loadPromotions() {
+  const [
+    lastUpdated,
+    setLastUpdated
+  ] = useState(null);
 
-    try {
 
-      setError(false);
+  const loadPromotions =
+    useCallback(
+      async () => {
 
-      const response =
-        await fetch(
-          `${DATA_URL}?t=${Date.now()}`
-        );
+        try {
 
-      if (!response.ok) {
-        throw new Error(
-          "Failed to load promotions"
-        );
-      }
+          setError(false);
 
-      const data =
-        await response.json();
 
-      const activePromotions =
-        data.promotions
-          .filter(
-            isPromotionActive
-          )
-          .sort(
-            (a, b) =>
-              a.priority -
-              b.priority
+          const response =
+            await fetch(
+              `${DATA_URL}?t=${Date.now()}`,
+              {
+                cache: "no-store"
+              }
+            );
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              `HTTP ${response.status}`
+            );
+
+          }
+
+
+          const data =
+            await response.json();
+
+
+          const allPromotions =
+            Array.isArray(
+              data.promotions
+            )
+              ? data.promotions
+              : [];
+
+
+          const activePromotions =
+            allPromotions
+              .filter(
+                isPromotionActive
+              )
+              .sort(
+                (a, b) =>
+                  Number(
+                    a.priority || 999
+                  ) -
+                  Number(
+                    b.priority || 999
+                  )
+              );
+
+
+          setPromotions(
+            activePromotions
           );
 
-      setPromotions(
-        activePromotions
-      );
 
-      setSettings(
-        data.settings
-      );
+          setSettings({
 
-      setCurrentIndex(0);
+            enabled:
+              data.settings?.enabled !== false,
 
-      setLoading(false);
+            rotationSeconds:
+              Number(
+                data.settings
+                  ?.rotationSeconds
+              ) || 8,
 
-    } catch (err) {
+            refreshMinutes:
+              Number(
+                data.settings
+                  ?.refreshMinutes
+              ) || 5
 
-      console.error(err);
+          });
 
-      setError(true);
 
-      setLoading(false);
+          setCurrentIndex(0);
 
-    }
+          setLastUpdated(
+            new Date()
+          );
 
-  }
+          setLoading(false);
 
+        } catch (err) {
+
+          console.error(
+            "Promotion loading error:",
+            err
+          );
+
+          setError(true);
+
+          setLoading(false);
+
+        }
+
+      },
+      []
+    );
+
+
+  /*
+    Initial download
+  */
 
   useEffect(() => {
 
     loadPromotions();
 
-    /*
-      Refresh JSON every 5 minutes.
-    */
+  }, [
+    loadPromotions
+  ]);
 
-    const refresh =
+
+  /*
+    Refresh promotions
+    automatically.
+  */
+
+  useEffect(() => {
+
+    const minutes =
+      settings.refreshMinutes || 5;
+
+
+    const interval =
       setInterval(
         loadPromotions,
-        5 * 60 * 1000
+        minutes *
+        60 *
+        1000
       );
 
+
     return () =>
-      clearInterval(refresh);
+      clearInterval(
+        interval
+      );
 
-  }, []);
+  }, [
+    settings.refreshMinutes,
+    loadPromotions
+  ]);
 
+
+  /*
+    Rotate promotions.
+  */
 
   useEffect(() => {
 
@@ -198,77 +322,176 @@ export default function App() {
       return;
     }
 
+
     const promotion =
       promotions[currentIndex];
 
+
     const seconds =
-      promotion?.displaySeconds ||
-      settings?.rotationSeconds ||
+      Number(
+        promotion?.displaySeconds
+      ) ||
+      settings.rotationSeconds ||
       8;
 
+
     const timer =
-      setTimeout(() => {
+      setTimeout(
+        () => {
 
-        setCurrentIndex(
-          previous => {
+          setCurrentIndex(
+            previous => {
 
-            if (
-              previous + 1 >=
-              promotions.length
-            ) {
-
-              return 0;
+              return (
+                previous + 1
+              ) %
+              promotions.length;
 
             }
+          );
 
-            return previous + 1;
+        },
+        seconds * 1000
+      );
 
-          }
-        );
-
-      }, seconds * 1000);
 
     return () =>
-      clearTimeout(timer);
+      clearTimeout(
+        timer
+      );
 
   }, [
     currentIndex,
     promotions,
-    settings
+    settings.rotationSeconds
   ]);
 
 
   /*
-    Reload the page if the TV
-    has been running for a long time.
+    Re-check schedules
+    every minute.
+
+    This allows a lunch
+    promotion to disappear
+    automatically when its
+    scheduled time ends.
   */
 
   useEffect(() => {
 
-    const healthCheck =
-      setInterval(() => {
+    const scheduleTimer =
+      setInterval(
+        loadPromotions,
+        60 * 1000
+      );
 
-        if (
-          document.visibilityState ===
-          "visible"
-        ) {
-
-          loadPromotions();
-
-        }
-
-      }, 30 * 60 * 1000);
 
     return () =>
       clearInterval(
-        healthCheck
+        scheduleTimer
       );
+
+  }, [
+    loadPromotions
+  ]);
+
+
+  /*
+    Fullscreen attempt.
+
+    Useful when running inside
+    a browser or WebView.
+  */
+
+  useEffect(() => {
+
+    const enableFullscreen =
+      async () => {
+
+        try {
+
+          if (
+            document.fullscreenElement
+          ) {
+            return;
+          }
+
+
+          if (
+            document.documentElement
+              .requestFullscreen
+          ) {
+
+            await document
+              .documentElement
+              .requestFullscreen();
+
+          }
+
+        } catch {
+
+          /*
+            Android TV WebView may
+            already be fullscreen.
+          */
+
+        }
+
+      };
+
+
+    const handleInteraction =
+      () => {
+
+        enableFullscreen();
+
+      };
+
+
+    window.addEventListener(
+      "click",
+      handleInteraction,
+      {
+        once: true
+      }
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        "click",
+        handleInteraction
+      );
+
+    };
 
   }, []);
 
 
+  /*
+    Memoized current promotion.
+  */
+
+  const currentPromotion =
+    useMemo(
+      () =>
+        promotions[
+          currentIndex
+        ],
+      [
+        promotions,
+        currentIndex
+      ]
+    );
+
+
   if (loading) {
-    return <Loading />;
+
+    return (
+      <Loading />
+    );
+
   }
 
 
@@ -278,17 +501,23 @@ export default function App() {
 
       <div className="error-screen">
 
-        <div className="error-logo">
-          TABS WAY
-        </div>
+        <img
+          className="error-logo"
+          src={`${BASE_URL}logo.png`}
+          alt="Tabsway Kitchen"
+        />
+
 
         <h1>
-          Unable to load promotions
+          Connection unavailable
         </h1>
 
+
         <p>
-          Checking connection...
+          Checking for the latest
+          Tabsway Kitchen promotions...
         </p>
+
 
         <button
           onClick={
@@ -306,7 +535,7 @@ export default function App() {
 
 
   if (
-    !settings?.enabled ||
+    settings.enabled === false ||
     promotions.length === 0
   ) {
 
@@ -314,12 +543,18 @@ export default function App() {
 
       <div className="idle-screen">
 
-        <div className="idle-logo">
-          TABS WAY KITCHEN
-        </div>
+        <img
+          className="idle-logo-image"
+          src={`${BASE_URL}logo.png`}
+          alt="Tabsway Kitchen"
+        />
 
-        <div>
-          Fresh food. Great moments.
+
+        <div className="idle-message">
+
+          Fresh food.
+          Great moments.
+
         </div>
 
       </div>
@@ -333,23 +568,44 @@ export default function App() {
 
     <div className="app">
 
-      <PromotionCard
-        promotion={
-          promotions[currentIndex]
-        }
-      />
+
+      {currentPromotion && (
+
+        <PromotionCard
+          key={
+            currentPromotion.id
+          }
+          promotion={
+            currentPromotion
+          }
+        />
+
+      )}
+
 
       <div className="progress">
 
         {promotions.map(
           (promotion, index) => (
 
-            <div
-              key={promotion.id}
+            <button
+              key={
+                promotion.id
+              }
               className={
                 index === currentIndex
                   ? "progress-dot active"
                   : "progress-dot"
+              }
+              aria-label={
+                `Show promotion ${
+                  index + 1
+                }`
+              }
+              onClick={() =>
+                setCurrentIndex(
+                  index
+                )
               }
             />
 
@@ -357,6 +613,33 @@ export default function App() {
         )}
 
       </div>
+
+
+      <div className="connection-status">
+
+        <span className="status-dot"></span>
+
+        LIVE
+
+      </div>
+
+
+      {lastUpdated && (
+
+        <div className="updated-status">
+
+          Updated{" "}
+          {lastUpdated.toLocaleTimeString(
+            [],
+            {
+              hour: "2-digit",
+              minute: "2-digit"
+            }
+          )}
+
+        </div>
+
+      )}
 
     </div>
 

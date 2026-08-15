@@ -2,64 +2,94 @@
   box-sizing: border-box;
 }
 
+
 html,
 body,
 #root {
-  margin: 0;
+
   width: 100%;
   height: 100%;
+
+  margin: 0;
+  padding: 0;
+
   overflow: hidden;
+
 }
 
+
 body {
-  font-family:
-    Inter,
-    Arial,
-    Helvetica,
-    sans-serif;
 
   background: #050505;
 
-  color: white;
+  color: #ffffff;
+
+  font-family:
+    Inter,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+
+  -webkit-font-smoothing:
+    antialiased;
+
 }
 
+
+/* =====================================
+   APP
+===================================== */
+
 .app {
+
+  position: relative;
+
   width: 100vw;
   height: 100vh;
 
   overflow: hidden;
 
   background: #050505;
+
 }
 
 
-/* =========================
+/* =====================================
    PROMOTION
-========================= */
+===================================== */
 
 .promotion {
 
-  position: relative;
+  position: absolute;
+
+  inset: 0;
 
   width: 100%;
   height: 100%;
 
-  background-size: cover;
+  background-color: #111;
+
   background-position: center;
+
+  background-repeat: no-repeat;
+
+  background-size: cover;
 
   overflow: hidden;
 
   animation:
     backgroundZoom
     12s
-    ease-out
+    cubic-bezier(.16,1,.3,1)
     forwards;
+
 }
 
 
-/* =========================
-   IMAGE
-========================= */
+/* =====================================
+   DARK OVERLAY
+===================================== */
 
 .image-overlay {
 
@@ -67,18 +97,22 @@ body {
 
   inset: 0;
 
+  z-index: 1;
+
   background:
+
     linear-gradient(
       90deg,
-      rgba(0,0,0,.88) 0%,
-      rgba(0,0,0,.72) 35%,
-      rgba(0,0,0,.28) 75%,
-      rgba(0,0,0,.10) 100%
+      rgba(0,0,0,.94) 0%,
+      rgba(0,0,0,.78) 28%,
+      rgba(0,0,0,.42) 58%,
+      rgba(0,0,0,.12) 100%
     );
 
-  z-index: 1;
 }
 
+
+/* Bottom cinematic darkness */
 
 .image-overlay::after {
 
@@ -89,78 +123,151 @@ body {
   inset: 0;
 
   background:
+
     linear-gradient(
       0deg,
-      rgba(0,0,0,.85),
-      transparent 45%
+      rgba(0,0,0,.88) 0%,
+      rgba(0,0,0,.35) 35%,
+      transparent 65%
     );
+
 }
 
 
-/* =========================
+/* =====================================
+   VIGNETTE
+===================================== */
+
+.image-vignette {
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  background:
+
+    radial-gradient(
+      ellipse at center,
+      transparent 40%,
+      rgba(0,0,0,.45) 100%
+    );
+
+}
+
+
+/* =====================================
    AMBIENT LIGHT
-========================= */
+===================================== */
 
 .ambient-light {
 
   position: absolute;
 
+  z-index: 2;
+
   width: 70vw;
   height: 70vw;
 
-  left: -25vw;
-  top: -25vw;
+  left: -30vw;
+  top: -30vw;
 
   border-radius: 50%;
 
   background:
+
     radial-gradient(
       circle,
-      rgba(255,170,40,.20),
-      transparent 65%
+      rgba(245,166,35,.25),
+      rgba(245,166,35,.08) 30%,
+      transparent 70%
     );
 
-  filter: blur(50px);
+  filter:
+    blur(55px);
+
+  pointer-events: none;
 
   animation:
     ambientMove
-    9s
+    10s
     ease-in-out
     infinite alternate;
 
-  z-index: 1;
 }
 
 
-/* =========================
+/* =====================================
+   FOOD GLOW
+===================================== */
+
+.food-glow {
+
+  position: absolute;
+
+  z-index: 2;
+
+  right: -10vw;
+  bottom: -30vw;
+
+  width: 70vw;
+  height: 70vw;
+
+  border-radius: 50%;
+
+  background:
+
+    radial-gradient(
+      circle,
+      rgba(255,179,70,.16),
+      transparent 65%
+    );
+
+  filter:
+    blur(70px);
+
+  animation:
+    foodGlowMove
+    12s
+    ease-in-out
+    infinite alternate;
+
+}
+
+
+/* =====================================
    CONTENT
-========================= */
+===================================== */
 
 .promotion-content {
 
   position: relative;
 
-  z-index: 3;
+  z-index: 5;
 
-  width: 55%;
+  width: 62%;
 
-  min-width: 550px;
+  min-width: 600px;
 
   padding-left: 7vw;
 
-  padding-top: 12vh;
+  padding-top: 13vh;
 
   animation:
     contentEnter
-    1s
+    .95s
     cubic-bezier(.16,1,.3,1)
     both;
+
 }
 
 
-/* =========================
+/* =====================================
    BADGE
-========================= */
+===================================== */
 
 .badge {
 
@@ -171,140 +278,184 @@ body {
   gap: 9px;
 
   padding:
-    10px
-    18px;
+    11px
+    20px;
+
+  border:
+
+    1px solid
+    rgba(255,255,255,.24);
 
   border-radius: 999px;
 
   background:
-    rgba(255,255,255,.12);
-
-  border:
-    1px solid
-    rgba(255,255,255,.25);
+    rgba(255,255,255,.10);
 
   backdrop-filter:
-    blur(12px);
+    blur(14px);
+
+  -webkit-backdrop-filter:
+    blur(14px);
 
   color: #ffd36a;
 
-  font-size: 15px;
+  font-size:
+    clamp(
+      13px,
+      1vw,
+      17px
+    );
 
-  font-weight: 700;
+  font-weight: 800;
 
   letter-spacing: 2px;
 
   text-transform: uppercase;
 
+  box-shadow:
+    0 10px 40px
+    rgba(0,0,0,.2);
+
   animation:
     badgeEnter
     .8s
-    .15s
+    .1s
     both;
+
 }
 
 
-/* =========================
+/* =====================================
    TITLE
-========================= */
+===================================== */
 
-h1 {
+.promotion-content h1 {
 
   margin:
     30px
     0
-    10px;
+    12px;
+
+  padding: 0;
+
+  max-width: 1000px;
 
   font-size:
     clamp(
-      58px,
+      60px,
       7vw,
-      120px
+      125px
     );
 
-  line-height: .92;
+  line-height:
+    .88;
 
-  font-weight: 900;
+  font-weight: 950;
 
-  letter-spacing: -4px;
+  letter-spacing:
+    -5px;
 
-  text-transform: uppercase;
+  text-transform:
+    uppercase;
+
+  color: #ffffff;
 
   text-shadow:
+
     0 10px 50px
-    rgba(0,0,0,.55);
+    rgba(0,0,0,.65);
 
   animation:
     titleEnter
     .9s
     .2s
     both;
+
 }
 
 
-/* =========================
+/* =====================================
    SUBTITLE
-========================= */
+===================================== */
 
-h2 {
+.promotion-content h2 {
 
   margin: 0;
 
+  padding: 0;
+
   font-size:
     clamp(
-      26px,
+      27px,
       3vw,
-      50px
+      52px
     );
 
-  font-weight: 600;
+  line-height: 1.1;
 
-  color: #ffd66d;
+  font-weight: 650;
+
+  color: #ffd36a;
+
+  text-shadow:
+    0 5px 25px
+    rgba(0,0,0,.5);
 
   animation:
     subtitleEnter
     .8s
     .4s
     both;
+
 }
 
 
-/* =========================
+/* =====================================
    DESCRIPTION
-========================= */
+===================================== */
 
-p {
+.promotion-content p {
 
-  max-width: 750px;
+  max-width: 800px;
 
   margin:
-    25px
+    27px
     0
     0;
+
+  padding: 0;
 
   font-size:
     clamp(
       18px,
       1.5vw,
-      28px
+      29px
     );
 
-  line-height: 1.55;
+  line-height:
+    1.5;
+
+  font-weight: 450;
 
   color:
-    rgba(255,255,255,.84);
+    rgba(255,255,255,.86);
+
+  text-shadow:
+    0 4px 20px
+    rgba(0,0,0,.55);
 
   animation:
     descriptionEnter
     .8s
     .55s
     both;
+
 }
 
 
-/* =========================
+/* =====================================
    BOTTOM ROW
-========================= */
+===================================== */
 
 .bottom-row {
 
@@ -312,118 +463,218 @@ p {
 
   align-items: center;
 
-  gap: 35px;
+  flex-wrap: wrap;
 
-  margin-top: 40px;
+  gap: 32px;
+
+  margin-top: 38px;
 
   animation:
     bottomEnter
     .8s
     .7s
     both;
+
 }
 
+
+/* =====================================
+   PRICE
+===================================== */
 
 .price {
 
   font-size:
     clamp(
       42px,
-      4vw,
-      72px
+      4.5vw,
+      78px
     );
 
-  font-weight: 900;
+  line-height: 1;
 
-  color: white;
+  font-weight: 950;
+
+  color: #ffffff;
 
   text-shadow:
-    0 4px 25px
-    rgba(0,0,0,.5);
+
+    0 6px 30px
+    rgba(0,0,0,.65);
+
 }
 
 
+/* =====================================
+   CTA
+===================================== */
+
 .cta {
 
-  display: flex;
+  display: inline-flex;
 
   align-items: center;
 
   gap: 12px;
 
   padding:
-    16px
-    24px;
+    17px
+    26px;
 
-  border-radius: 12px;
+  border-radius: 13px;
 
   background:
-    #f5a623;
+    linear-gradient(
+      135deg,
+      #ffc15a,
+      #ed9412
+    );
 
-  color: #111;
+  color: #17120a;
 
-  font-size: 18px;
+  font-size:
+    clamp(
+      16px,
+      1.3vw,
+      21px
+    );
 
-  font-weight: 900;
+  font-weight: 950;
 
   letter-spacing: 1px;
 
   box-shadow:
-    0 10px 35px
-    rgba(245,166,35,.25);
+
+    0 12px 35px
+    rgba(237,148,18,.28);
 
   animation:
     ctaPulse
     2.5s
     1.5s
+    ease-in-out
     infinite;
+
 }
 
 
-/* =========================
-   BRAND
-========================= */
+/* =====================================
+   BRAND LOGO
+===================================== */
 
 .bottom-brand {
 
   position: absolute;
 
-  z-index: 4;
+  z-index: 10;
 
   right: 5vw;
-  bottom: 4vh;
 
-  font-size: 15px;
+  bottom: 5vh;
 
-  letter-spacing: 4px;
+  display: flex;
 
-  font-weight: 800;
+  align-items: center;
 
-  color:
-    rgba(255,255,255,.75);
+  justify-content: center;
+
+  animation:
+    logoEnter
+    1s
+    .8s
+    both;
+
 }
 
 
-/* =========================
-   PROGRESS
-========================= */
+.bottom-brand img {
+
+  display: block;
+
+  width:
+    clamp(
+      160px,
+      13vw,
+      300px
+    );
+
+  height: auto;
+
+  max-height: 120px;
+
+  object-fit: contain;
+
+  filter:
+
+    drop-shadow(
+      0 8px 28px
+      rgba(0,0,0,.65)
+    );
+
+}
+
+
+/* =====================================
+   SCREEN SHINE
+===================================== */
+
+.screen-shine {
+
+  position: absolute;
+
+  z-index: 8;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 45%,
+      rgba(255,255,255,.035) 50%,
+      transparent 55%,
+      transparent 100%
+    );
+
+  transform:
+    translateX(-100%);
+
+  animation:
+    shineSweep
+    8s
+    2s
+    ease-in-out
+    infinite;
+
+}
+
+
+/* =====================================
+   PROGRESS DOTS
+===================================== */
 
 .progress {
 
   position: fixed;
 
-  z-index: 20;
-
-  bottom: 3vh;
+  z-index: 30;
 
   left: 50%;
+
+  bottom: 3vh;
 
   transform:
     translateX(-50%);
 
   display: flex;
 
+  align-items: center;
+
   gap: 8px;
+
 }
 
 
@@ -432,35 +683,160 @@ p {
   width: 7px;
   height: 7px;
 
-  border-radius: 50%;
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 999px;
 
   background:
     rgba(255,255,255,.35);
 
+  cursor: pointer;
+
   transition:
-    all .4s ease;
+
+    width .4s ease,
+    background .4s ease,
+    transform .4s ease;
+
+}
+
+
+.progress-dot:hover {
+
+  transform:
+    scale(1.3);
+
 }
 
 
 .progress-dot.active {
 
-  width: 30px;
+  width: 34px;
+
+  background:
+    #f5a623;
+
+}
+
+
+/* =====================================
+   LIVE STATUS
+===================================== */
+
+.connection-status {
+
+  position: fixed;
+
+  z-index: 40;
+
+  top: 3vh;
+
+  right: 3vw;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding:
+    8px
+    12px;
 
   border-radius: 999px;
 
   background:
-    #f5a623;
+    rgba(0,0,0,.28);
+
+  border:
+    1px solid
+    rgba(255,255,255,.12);
+
+  backdrop-filter:
+    blur(12px);
+
+  color:
+    rgba(255,255,255,.65);
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+
 }
 
 
-/* =========================
+.status-dot {
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #54e38e;
+
+  box-shadow:
+    0 0 12px
+    rgba(84,227,142,.8);
+
+  animation:
+    statusPulse
+    2s
+    infinite;
+
+}
+
+
+.updated-status {
+
+  position: fixed;
+
+  z-index: 40;
+
+  left: 3vw;
+
+  top: 3vh;
+
+  color:
+    rgba(255,255,255,.35);
+
+  font-size: 11px;
+
+  letter-spacing: 1px;
+
+}
+
+
+/* =====================================
    LOADING
-========================= */
+===================================== */
 
 .loading-screen {
 
   width: 100vw;
   height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background:
+
+    radial-gradient(
+      circle at center,
+      #222 0%,
+      #0b0b0b 50%,
+      #030303 100%
+    );
+
+}
+
+
+.loading-center {
 
   display: flex;
 
@@ -470,19 +846,43 @@ p {
 
   justify-content: center;
 
-  background:
-    radial-gradient(
-      circle,
-      #222,
-      #050505 70%
+}
+
+
+.loading-logo {
+
+  width:
+    min(
+      420px,
+      55vw
     );
+
+  max-height: 160px;
+
+  object-fit: contain;
+
+  margin-bottom: 40px;
+
+  filter:
+
+    drop-shadow(
+      0 15px 40px
+      rgba(0,0,0,.7)
+    );
+
+  animation:
+    logoPulse
+    2s
+    ease-in-out
+    infinite alternate;
+
 }
 
 
 .loader {
 
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
 
   border:
     4px solid
@@ -491,13 +891,17 @@ p {
   border-top-color:
     #f5a623;
 
+  border-right-color:
+    #ffd36a;
+
   border-radius: 50%;
 
   animation:
     spin
-    1s
+    .9s
     linear
     infinite;
+
 }
 
 
@@ -506,17 +910,18 @@ p {
   margin-top: 25px;
 
   color:
-    rgba(255,255,255,.65);
+    rgba(255,255,255,.62);
 
-  font-size: 18px;
+  font-size: 16px;
 
   letter-spacing: 2px;
+
 }
 
 
-/* =========================
+/* =====================================
    ERROR
-========================= */
+===================================== */
 
 .error-screen {
 
@@ -534,40 +939,58 @@ p {
   text-align: center;
 
   background:
-    #080808;
+
+    radial-gradient(
+      circle,
+      #1d1d1d,
+      #050505 70%
+    );
+
 }
 
 
 .error-logo {
 
-  font-size: 48px;
+  width:
+    min(
+      420px,
+      55vw
+    );
 
-  font-weight: 900;
+  max-height: 150px;
 
-  color: #f5a623;
+  object-fit: contain;
 
-  letter-spacing: 4px;
+  margin-bottom: 25px;
+
 }
 
 
 .error-screen h1 {
 
-  margin:
-    30px
-    0
-    10px;
+  margin: 0;
 
-  font-size: 38px;
+  font-size: 40px;
 
-  letter-spacing: 0;
+  font-weight: 800;
+
+  letter-spacing: -1px;
+
 }
 
 
 .error-screen p {
 
-  margin: 0;
+  margin:
+    15px
+    0
+    0;
 
   font-size: 18px;
+
+  color:
+    rgba(255,255,255,.6);
+
 }
 
 
@@ -576,26 +999,32 @@ p {
   margin-top: 30px;
 
   padding:
-    14px
-    25px;
+    15px
+    28px;
 
   border: 0;
 
   border-radius: 10px;
 
-  background: #f5a623;
+  background:
+    #f5a623;
 
   color: #111;
 
-  font-weight: 800;
+  font-size: 15px;
+
+  font-weight: 900;
+
+  letter-spacing: 1px;
 
   cursor: pointer;
+
 }
 
 
-/* =========================
-   IDLE
-========================= */
+/* =====================================
+   IDLE SCREEN
+===================================== */
 
 .idle-screen {
 
@@ -610,64 +1039,135 @@ p {
 
   justify-content: center;
 
-  gap: 20px;
+  gap: 25px;
 
   background:
+
     radial-gradient(
-      circle,
+      circle at center,
       #262626,
-      #050505
+      #080808 65%,
+      #030303
     );
 
-  font-size: 24px;
 }
 
 
-.idle-logo {
+.idle-logo-image {
 
-  font-size: 60px;
+  width:
+    min(
+      550px,
+      55vw
+    );
 
-  font-weight: 900;
+  max-height: 180px;
 
-  color: #f5a623;
+  object-fit: contain;
 
-  letter-spacing: 4px;
+  filter:
+
+    drop-shadow(
+      0 15px 40px
+      rgba(0,0,0,.6)
+    );
+
+  animation:
+    logoPulse
+    2.5s
+    ease-in-out
+    infinite alternate;
+
 }
 
 
-/* =========================
+.idle-message {
+
+  font-size:
+    clamp(
+      20px,
+      2vw,
+      32px
+    );
+
+  color:
+    rgba(255,255,255,.65);
+
+}
+
+
+/* =====================================
    ANIMATIONS
-========================= */
+===================================== */
 
 @keyframes backgroundZoom {
 
   from {
-    transform: scale(1.04);
+
+    transform:
+      scale(1.03);
+
   }
 
   to {
-    transform: scale(1.13);
+
+    transform:
+      scale(1.13);
+
   }
+
 }
 
 
 @keyframes ambientMove {
 
   from {
+
     transform:
       translate(
         -5%,
         -5%
       );
+
   }
 
   to {
+
     transform:
       translate(
-        25%,
-        20%
+        30%,
+        25%
       );
+
   }
+
+}
+
+
+@keyframes foodGlowMove {
+
+  from {
+
+    transform:
+      translate(
+        10%,
+        10%
+      )
+      scale(.95);
+
+  }
+
+  to {
+
+    transform:
+      translate(
+        -10%,
+        -15%
+      )
+      scale(1.1);
+
+  }
+
 }
 
 
@@ -678,7 +1178,7 @@ p {
     opacity: 0;
 
     transform:
-      translateY(50px);
+      translateY(60px);
 
   }
 
@@ -690,6 +1190,7 @@ p {
       translateY(0);
 
   }
+
 }
 
 
@@ -700,7 +1201,7 @@ p {
     opacity: 0;
 
     transform:
-      translateY(20px)
+      translateY(25px)
       scale(.9);
 
   }
@@ -714,6 +1215,7 @@ p {
       scale(1);
 
   }
+
 }
 
 
@@ -724,10 +1226,10 @@ p {
     opacity: 0;
 
     transform:
-      translateY(40px);
+      translateY(45px);
 
     filter:
-      blur(8px);
+      blur(10px);
 
   }
 
@@ -742,6 +1244,7 @@ p {
       blur(0);
 
   }
+
 }
 
 
@@ -752,7 +1255,7 @@ p {
     opacity: 0;
 
     transform:
-      translateX(-30px);
+      translateX(-35px);
 
   }
 
@@ -764,32 +1267,11 @@ p {
       translateX(0);
 
   }
+
 }
 
 
 @keyframes descriptionEnter {
-
-  from {
-
-    opacity: 0;
-
-    transform:
-      translateY(20px);
-
-  }
-
-  to {
-
-    opacity: 1;
-
-    transform:
-      translateY(0);
-
-  }
-}
-
-
-@keyframes bottomEnter {
 
   from {
 
@@ -808,6 +1290,78 @@ p {
       translateY(0);
 
   }
+
+}
+
+
+@keyframes bottomEnter {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(30px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+@keyframes logoEnter {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(25px)
+      scale(.88);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+
+}
+
+
+@keyframes logoPulse {
+
+  from {
+
+    opacity: .78;
+
+    transform:
+      scale(.985);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      scale(1.015);
+
+  }
+
 }
 
 
@@ -827,13 +1381,106 @@ p {
       scale(1.04);
 
   }
+
+}
+
+
+@keyframes statusPulse {
+
+  0%,
+  100% {
+
+    opacity: 1;
+
+    transform:
+      scale(1);
+
+  }
+
+  50% {
+
+    opacity: .45;
+
+    transform:
+      scale(.75);
+
+  }
+
+}
+
+
+@keyframes shineSweep {
+
+  0% {
+
+    transform:
+      translateX(-120%);
+
+  }
+
+  25%,
+  100% {
+
+    transform:
+      translateX(120%);
+
+  }
+
 }
 
 
 @keyframes spin {
 
   to {
+
     transform:
       rotate(360deg);
+
   }
+
+}
+
+
+/* =====================================
+   TV / LARGE SCREEN
+===================================== */
+
+@media (
+  min-width: 1600px
+) {
+
+  .promotion-content {
+
+    padding-left: 8vw;
+
+    padding-top: 14vh;
+
+  }
+
+}
+
+
+/* =====================================
+   REDUCE MOTION
+===================================== */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+
+  *,
+  *::before,
+  *::after {
+
+    animation-duration:
+      .01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      .01ms !important;
+
+  }
+
 }
