@@ -3,17 +3,17 @@ import { ArrowRight } from "lucide-react";
 const BASE_URL = import.meta.env.BASE_URL || "/";
 
 /* =====================================================
-   IMAGE URL HELPER
+   BUILD ASSET URL
 ===================================================== */
 
-function getImageUrl(image) {
-  if (!image) return "";
+function getAssetUrl(path) {
+  if (!path) return "";
 
-  const value = String(image).trim();
+  const value = String(path).trim();
 
   if (!value) return "";
 
-  // External image
+  // Already an absolute URL
   if (
     value.startsWith("http://") ||
     value.startsWith("https://") ||
@@ -22,20 +22,15 @@ function getImageUrl(image) {
     return value;
   }
 
-  // Remove leading slashes so GitHub Pages base path
-  // is preserved correctly.
+  // Remove leading slash
   const cleanPath = value.replace(/^\/+/, "");
 
-  return `${BASE_URL}${cleanPath}`;
-}
+  // Make sure BASE_URL ends with /
+  const base = BASE_URL.endsWith("/")
+    ? BASE_URL
+    : `${BASE_URL}/`;
 
-
-/* =====================================================
-   LOGO URL
-===================================================== */
-
-function getLogoUrl() {
-  return `${BASE_URL}logo_2.png`;
+  return `${base}${cleanPath}`;
 }
 
 
@@ -44,8 +39,11 @@ function getLogoUrl() {
 ===================================================== */
 
 export default function PromotionCard({ promotion = {} }) {
-  const imageUrl = getImageUrl(promotion.image);
-  const logoUrl = getLogoUrl();
+
+  const imageUrl = getAssetUrl(promotion.image);
+
+  const logoUrl = getAssetUrl("logo_2.png");
+
 
   return (
     <main
@@ -58,7 +56,7 @@ export default function PromotionCard({ promotion = {} }) {
     >
 
       {/* =================================================
-          BACKGROUND OVERLAYS
+          BACKGROUND
       ================================================= */}
 
       <div className="photo-overlay" />
@@ -67,7 +65,7 @@ export default function PromotionCard({ promotion = {} }) {
 
 
       {/* =================================================
-          DECORATIVE LIGHT EFFECTS
+          DECORATIVE LIGHTS
       ================================================= */}
 
       <div className="yellow-glow" />
@@ -88,9 +86,6 @@ export default function PromotionCard({ promotion = {} }) {
           alt="Tabsway Kitchen"
           className="header-logo"
           draggable="false"
-          onError={(event) => {
-            event.currentTarget.style.display = "none";
-          }}
         />
 
 
@@ -98,9 +93,9 @@ export default function PromotionCard({ promotion = {} }) {
 
         <div className="header-promo">
 
-          <span />
+          <span className="header-promo-dot" />
 
-          <span className="header-promo-text">
+          <span className="header-promo-label">
             {promotion.headerText || "SPECIAL OFFER"}
           </span>
 
@@ -116,9 +111,7 @@ export default function PromotionCard({ promotion = {} }) {
       <section className="promotion-content">
 
 
-        {/* =================================================
-            BADGE
-        ================================================= */}
+        {/* BADGE */}
 
         {promotion.badge && (
           <div className="promo-badge">
@@ -127,16 +120,12 @@ export default function PromotionCard({ promotion = {} }) {
         )}
 
 
-        {/* =================================================
-            ACCENT
-        ================================================= */}
+        {/* ACCENT */}
 
         <div className="accent" />
 
 
-        {/* =================================================
-            TITLE
-        ================================================= */}
+        {/* TITLE */}
 
         {promotion.title && (
           <h1>
@@ -145,9 +134,7 @@ export default function PromotionCard({ promotion = {} }) {
         )}
 
 
-        {/* =================================================
-            SUBTITLE
-        ================================================= */}
+        {/* SUBTITLE */}
 
         {promotion.subtitle && (
           <h2>
@@ -156,9 +143,7 @@ export default function PromotionCard({ promotion = {} }) {
         )}
 
 
-        {/* =================================================
-            DESCRIPTION
-        ================================================= */}
+        {/* DESCRIPTION */}
 
         {promotion.description && (
           <p className="description">
@@ -167,17 +152,12 @@ export default function PromotionCard({ promotion = {} }) {
         )}
 
 
-        {/* =================================================
-            OFFER
-        ================================================= */}
+        {/* OFFER */}
 
         {(promotion.price || promotion.buttonText) && (
           <div className="offer">
 
-
-            {/* =================================================
-                PRICE
-            ================================================= */}
+            {/* PRICE */}
 
             {promotion.price && (
               <div className="price">
@@ -194,9 +174,7 @@ export default function PromotionCard({ promotion = {} }) {
             )}
 
 
-            {/* =================================================
-                CTA
-            ================================================= */}
+            {/* CTA */}
 
             {promotion.buttonText && (
               <div className="cta">
@@ -220,19 +198,6 @@ export default function PromotionCard({ promotion = {} }) {
 
 
       {/* =================================================
-          FOOD IMAGE INDICATOR
-          Only appears when an image exists
-      ================================================= */}
-
-      {imageUrl && (
-        <div className="image-indicator">
-          <span />
-          <span>FRESHLY PREPARED</span>
-        </div>
-      )}
-
-
-      {/* =================================================
           FOOTER
       ================================================= */}
 
@@ -251,7 +216,7 @@ export default function PromotionCard({ promotion = {} }) {
 
 
       {/* =================================================
-          SHINE ANIMATION
+          SHINE
       ================================================= */}
 
       <div className="shine" />

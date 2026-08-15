@@ -309,6 +309,113 @@ body {
 }
 
 
+/* =====================================================
+   HEADER PROMOTION
+===================================================== */
+
+.header-promo {
+  position: relative;
+
+  z-index: 50;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 11px;
+
+  min-height: 46px;
+
+  padding:
+    11px
+    20px;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e31b23,
+      #b90f16
+    );
+
+  color: #ffffff;
+
+  border:
+    2px solid
+    rgba(255, 210, 28, .9);
+
+  font-size: 13px;
+
+  font-weight: 950;
+
+  letter-spacing: 1.8px;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+
+  box-shadow:
+    0 10px 30px
+    rgba(227, 27, 35, .35),
+
+    0 0 0 4px
+    rgba(255, 255, 255, .22);
+
+  animation:
+    pillEntrance
+    .8s
+    .25s
+    both;
+}
+
+
+/* Yellow status dot */
+
+.header-promo-dot {
+  display: block;
+
+  flex: 0 0 auto;
+
+  width: 10px;
+
+  height: 10px;
+
+  border-radius: 50%;
+
+  background:
+    #ffd21c;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(255, 210, 28, .2),
+
+    0 0 16px
+    rgba(255, 210, 28, .9);
+
+  animation:
+    pulse
+    1.4s
+    ease-in-out
+    infinite;
+}
+
+
+/* Text */
+
+.header-promo-label {
+  display: block;
+
+  color: #ffffff;
+
+  line-height: 1;
+
+  white-space: nowrap;
+}
+
+
 .header-promo span {
   width: 9px;
   height: 9px;
