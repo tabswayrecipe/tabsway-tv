@@ -38,7 +38,7 @@ export default function PromotionCard({ promotion }) {
       <header className="tv-header">
 
         <img
-          src={`${BASE_URL}logo.png`}
+          src={`${BASE_URL}logo_2.png`}
           alt="Tabsway Kitchen"
           className="header-logo"
         />
