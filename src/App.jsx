@@ -11,16 +11,25 @@ import PromotionCard
 import Loading
   from "./components/Loading";
 
-import logoImage
-  from "./assets/logo_2.png";
-
 
 /* =====================================================
-   DATA URL
+   BASE URL
 ===================================================== */
 
 const BASE_URL =
   import.meta.env.BASE_URL || "/";
+
+
+/* =====================================================
+   ASSET URLS
+
+   IMPORTANT:
+   Images are NOT imported.
+   They come from /public/images/
+===================================================== */
+
+const LOGO_URL =
+  `${BASE_URL}images/logo_2.png`;
 
 const DATA_URL =
   `${BASE_URL}data/promotions.json`;
@@ -74,9 +83,7 @@ function isPromotionActive(promotion) {
   }
 
 
-  /*
-   * Explicitly disabled promotion
-   */
+  /* Disabled promotion */
 
   if (
     promotion.enabled === false
@@ -85,10 +92,7 @@ function isPromotionActive(promotion) {
   }
 
 
-  /*
-   * No schedule means
-   * promotion is always active.
-   */
+  /* No schedule */
 
   if (
     !promotion.schedule ||
@@ -114,12 +118,7 @@ function isPromotionActive(promotion) {
     );
 
 
-  /*
-   * Normal schedule
-   *
-   * Example:
-   * 11:00 → 15:00
-   */
+  /* Normal schedule */
 
   if (start <= end) {
 
@@ -131,12 +130,7 @@ function isPromotionActive(promotion) {
   }
 
 
-  /*
-   * Overnight schedule
-   *
-   * Example:
-   * 22:00 → 02:00
-   */
+  /* Overnight schedule */
 
   return (
     current >= start ||
@@ -197,7 +191,7 @@ export default function App() {
 
 
   /* ===================================================
-     CURRENT PROMOTION
+     CURRENT INDEX
   =================================================== */
 
   const [
@@ -271,16 +265,9 @@ export default function App() {
             await response.json();
 
 
-          /*
-           * Your JSON structure is:
-           *
-           * {
-           *   restaurant: "...",
-           *   settings: {...},
-           *   promotions: [...]
-           * }
-           */
-
+          /* =========================================
+             PROMOTIONS
+          ========================================= */
 
           const allPromotions =
             Array.isArray(
@@ -290,19 +277,15 @@ export default function App() {
               : [];
 
 
-          /*
-           * Filter and sort
-           */
-
           const activePromotions =
             sortPromotions(
               allPromotions
             );
 
 
-          /*
-           * Settings
-           */
+          /* =========================================
+             SETTINGS
+          ========================================= */
 
           const newSettings = {
 
@@ -322,9 +305,9 @@ export default function App() {
           };
 
 
-          /*
-           * Save data
-           */
+          /* =========================================
+             SAVE
+          ========================================= */
 
           setPromotions(
             activePromotions
@@ -336,17 +319,16 @@ export default function App() {
           );
 
 
-          /*
-           * Always start at
-           * first promotion
-           */
+          /* =========================================
+             RESET INDEX
+          ========================================= */
 
           setCurrentIndex(0);
 
 
-          /*
-           * Update timestamp
-           */
+          /* =========================================
+             UPDATE TIME
+          ========================================= */
 
           setLastUpdated(
             new Date()
@@ -406,10 +388,13 @@ export default function App() {
       );
 
 
-    return () =>
+    return () => {
+
       clearInterval(
         interval
       );
+
+    };
 
   }, [
     settings.refreshMinutes,
@@ -467,10 +452,13 @@ export default function App() {
       );
 
 
-    return () =>
+    return () => {
+
       clearTimeout(
         timer
       );
+
+    };
 
   }, [
     currentIndex,
@@ -492,10 +480,13 @@ export default function App() {
       );
 
 
-    return () =>
+    return () => {
+
       clearInterval(
         scheduleTimer
       );
+
+    };
 
   }, [
     loadPromotions
@@ -625,8 +616,9 @@ export default function App() {
 
         <img
           className="error-logo"
-          src={logoImage}
+          src={LOGO_URL}
           alt="TabsWay Kitchen"
+          draggable="false"
         />
 
 
@@ -672,8 +664,9 @@ export default function App() {
 
         <img
           className="idle-logo-image"
-          src={logoImage}
+          src={LOGO_URL}
           alt="TabsWay Kitchen"
+          draggable="false"
         />
 
 

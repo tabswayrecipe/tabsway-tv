@@ -5,40 +5,43 @@ const BASE_URL =
 
 
 /* =====================================================
-   ASSET URL
+   IMAGE URL
 ===================================================== */
 
-function getAssetUrl(path) {
+function getImageUrl(image) {
 
-  if (!path) {
+  if (!image) {
     return "";
   }
 
   const value =
-    String(path).trim();
+    String(image).trim();
 
   if (!value) {
     return "";
   }
 
-  /* External URL */
+
+  /* External image */
 
   if (
     value.startsWith("http://") ||
-    value.startsWith("https://") ||
-    value.startsWith("data:")
+    value.startsWith("https://")
   ) {
     return value;
   }
 
+
   /*
-   * Remove any old paths from the JSON.
+   * Get only the filename.
    *
-   * Examples:
+   * This means all of these work:
    *
-   * family.jpg
-   * /images/family.jpg
-   * /tabsway-tv/images/family.jpg
+   * download.jpeg
+   *
+   * /images/download.jpeg
+   *
+   * /tabsway-tv/images/download.jpeg
    */
 
   const filename =
@@ -67,7 +70,7 @@ export default function PromotionCard({
 }) {
 
   const imageUrl =
-    getAssetUrl(
+    getImageUrl(
       promotion.image
     );
 
@@ -82,7 +85,7 @@ export default function PromotionCard({
 
 
       {/* =================================================
-          FOOD IMAGE
+          FOOD BACKGROUND
       ================================================= */}
 
       {imageUrl && (
@@ -108,52 +111,42 @@ export default function PromotionCard({
 
 
       {/* =================================================
-          DECORATIVE LIGHTS
-      ================================================= */}
-
-      <div
-        className="yellow-glow"
-      />
-
-      <div
-        className="red-glow"
-      />
-
-
-      {/* =================================================
           HEADER
       ================================================= */}
 
       <header className="tv-header">
-
-
-        {/* LOGO */}
 
         <img
           src={logoUrl}
           alt="TabsWay Kitchen"
           className="header-logo"
           draggable="false"
+
+          onError={(event) => {
+
+            console.error(
+              "Logo failed to load:",
+              logoUrl
+            );
+
+            event.currentTarget.style.display =
+              "none";
+
+          }}
+
         />
 
 
-        {/* SPECIAL OFFER */}
-
         <div className="header-promo">
 
-          <span
-            className="header-promo-dot"
-          />
+          <span className="header-promo-dot" />
 
-          <span
-            className="header-promo-label"
-          >
+          <span className="header-promo-label">
             {promotion.headerText ||
               "SPECIAL OFFER"}
           </span>
 
         </div>
-
 
       </header>
 
@@ -162,32 +155,20 @@ export default function PromotionCard({
           CONTENT
       ================================================= */}
 
-      <section
-        className="promotion-content"
-      >
+      <section className="promotion-content">
 
-
-        {/* BADGE */}
 
         {promotion.badge && (
 
           <div className="promo-badge">
-
             {promotion.badge}
-
           </div>
 
         )}
 
 
-        {/* ACCENT */}
+        <div className="accent" />
 
-        <div
-          className="accent"
-        />
-
-
-        {/* TITLE */}
 
         {promotion.title && (
 
@@ -198,8 +179,6 @@ export default function PromotionCard({
         )}
 
 
-        {/* SUBTITLE */}
-
         {promotion.subtitle && (
 
           <h2>
@@ -208,8 +187,6 @@ export default function PromotionCard({
 
         )}
 
-
-        {/* DESCRIPTION */}
 
         {promotion.description && (
 
@@ -220,15 +197,11 @@ export default function PromotionCard({
         )}
 
 
-        {/* OFFER */}
-
         {(promotion.price ||
           promotion.buttonText) && (
 
           <div className="offer">
 
-
-            {/* PRICE */}
 
             {promotion.price && (
 
@@ -247,8 +220,6 @@ export default function PromotionCard({
 
             )}
 
-
-            {/* BUTTON */}
 
             {promotion.buttonText && (
 
@@ -291,10 +262,6 @@ export default function PromotionCard({
 
       </footer>
 
-
-      {/* =================================================
-          SHINE
-      ================================================= */}
 
       <div className="shine" />
 
